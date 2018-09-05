@@ -31,9 +31,10 @@ function main
 	do
 	    echo "**********************************************"
 	    echo "正在查看${host}的SELinux状态"
-        STATUS=`ssh $host "/usr/sbin/sestatus -v | grep 'SELinux status'|cut -d ':' -f2 | tr -d ' ' "`
+        STATUS=`getenforce`
+        #`ssh $host "/usr/sbin/sestatus -v | grep 'SELinux status'|cut -d ':' -f2 | tr -d ' ' "`
         if [[ "x$STATUS" = "xenabled" ]]; then
-            HOSTS=(${host},${HOSTS})
+            HOSTS=(${host},$HOSTS)
             echo "${host}上的selinux状态为enable"
             else
             echo "${host}上的selinux状态为disabled"

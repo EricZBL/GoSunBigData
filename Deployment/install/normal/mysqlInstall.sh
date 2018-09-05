@@ -74,10 +74,10 @@ MYSQL_LOG="/var/log/mysqld.log"
 
 ## 重新安装mysql
 echo "开始重新安装mysql................................."  |  tee  -a  $LOG_FILE
-rpm -ivh ${MYSQL_RPM_DIR}/mysql-community-common-5.7.19-1.el6.x86_64.rpm
-rpm -ivh ${MYSQL_RPM_DIR}/mysql-community-libs-5.7.19-1.el6.x86_64.rpm
-rpm -ivh ${MYSQL_RPM_DIR}/mysql-community-client-5.7.19-1.el6.x86_64.rpm
-rpm -ivh ${MYSQL_RPM_DIR}/mysql-community-server-5.7.19-1.el6.x86_64.rpm
+rpm -ivh ${MYSQL_RPM_DIR}/mysql-community-common-5.7.19-1.el7.x86_64.rpm
+rpm -ivh ${MYSQL_RPM_DIR}/mysql-community-libs-5.7.19-1.el7.x86_64.rpm
+rpm -ivh ${MYSQL_RPM_DIR}/mysql-community-client-5.7.19-1.el7.x86_64.rpm
+rpm -ivh ${MYSQL_RPM_DIR}/mysql-community-server-5.7.19-1.el7.x86_64.rpm
 
 ## 启动mysql 服务
 service mysqld start

@@ -19,7 +19,7 @@ LOG_DIR=${SPARK_DIR}/logs
 ##  log 日记文件
 LOG_FILE=${LOG_DIR}/add-udf.log
 
-cd ..
+cd ../..
 SCRIPT_DIR=`pwd`
 CONF_FILE=${SCRIPT_DIR}/conf/project-conf.properties
 

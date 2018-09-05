@@ -15,17 +15,12 @@ cd `dirname $0`
 BIN_DIR=`pwd`                                         ### bin目录：脚本所在目录
 cd ..
 SPARK_DIR=`pwd`                                         ### spark模块部署目录
-CONF_FTP_DIR=$SPARK_DIR/conf                            ### 配置文件目录
+CONF_DIR=$SPARK_DIR/../conf                            ### 配置文件目录
 LOG_DIR=$SPARK_DIR/logs                                 ### log日志目录
 LOG_FILE=$LOG_DIR/create-kafka-topic.log              ### log日志目录
 
-cd ..
-CLUSTER_DIR=`pwd`                                      ### cluster模块目录
-cd ..
-REAL_DIR=`pwd`                                        ##项目根目录
-COMMON_DIR=$REAL_DIR/common                         ### common模块部署目录
-CONF_COMMON_DIR=$COMMON_DIR/conf                      ### 配置文件目录
-CONF_FILE=$CONF_COMMON_DIR/project-conf.properties    ### 项目配置文件
+cd ../..
+CONF_FILE=${CONF_DIR}/project-conf.properties    ### 项目配置文件
 
 cd ../hzgc/conf
 CONF_HZGC_DIR=`pwd`                                   ### 集群配置文件目录

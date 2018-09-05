@@ -14,7 +14,7 @@
 cd `dirname $0`
 BIN_DIR=`pwd`                                   ### bin 目录
 
-cd ..
+cd ../..
 SCRIPT_DIR=`pwd`
 CONF_FILE=${SCRIPT_DIR}/conf/project-conf.properties
 ## bigdata cluster path

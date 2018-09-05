@@ -117,7 +117,7 @@ listen admin_stats
 function install_haproxy()
 {
     rsync -rvl ${HAPROXY_RPM_DIR} ${INSTALL_HOST}:${INSTALL_HOME_BASIC} > /dev/null
-    ssh root@${INSTALL_HOST} "rpm -ivh ${HAPROXY_RPM_INSTALL_HOME}/haproxy-1.5.18-1.el6.x86_64.rpm; which dos2unix; rm -rf ${INSTALL_HOME_BASIC}"
+    ssh root@${INSTALL_HOST} "rpm -ivh ${HAPROXY_RPM_INSTALL_HOME}/haproxy-1.5.18-7.el7.x86_64.rpm; which dos2unix; rm -rf ${INSTALL_HOME_BASIC}"
 }
 
 

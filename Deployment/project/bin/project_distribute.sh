@@ -133,20 +133,20 @@ VISUAL_CONF_DIR=${VISUAL_DIR}/conf                       ##visual模块conf目�
 VISUAL_PRO_FILE=${VISUAL_CONF_DIR}/application-pro.properties   ##visual模块配置文件
 
 ## person模块部署目录
-PERSON_DIR=${SERVICE_DIR}/face/alarm
+PERSON_DIR=${SERVICE_DIR}/face/dynPerson
 PERSON_INSTALL_DIR=${SERVICE_INSTALL_DIR}/face/dynPerson
-PERSON_BIN_DIR=${ALARM_DIR}/bin                           ##person模块脚本存放目录
-PERSON_START_FILE=${ALARM_BIN_DIR}/start-dynperson.sh       ##person模块启动脚本
-PERSON_CONF_DIR=${ALARM_DIR}/conf                       ##person模块conf目录
-PERSON_PRO_FILE=${ALARM_CONF_DIR}/application-pro.properties   ##person模块配置文件
+PERSON_BIN_DIR=${PERSON_DIR}/bin                           ##person模块脚本存放目录
+PERSON_START_FILE=${PERSON_BIN_DIR}/start-dynperson.sh       ##person模块启动脚本
+PERSON_CONF_DIR=${PERSON_DIR}/conf                       ##person模块conf目录
+PERSON_PRO_FILE=${PERSON_CONF_DIR}/application-pro.properties   ##person模块配置文件
 
 ## car模块部署目录
-CAR_DIR=${SERVICE_DIR}/face/alarm
+CAR_DIR=${SERVICE_DIR}/face/dynCar
 CAR_INSTALL_DIR=${SERVICE_INSTALL_DIR}/face/dynCar
-CAR_BIN_DIR=${ALARM_DIR}/bin                           ##car模块脚本存放目录
-CAR_START_FILE=${ALARM_BIN_DIR}/start-dyncar.sh       ##car模块启动脚本
-CAR_CONF_DIR=${ALARM_DIR}/conf                       ##car模块conf目录
-CAR_PRO_FILE=${ALARM_CONF_DIR}/application-pro.properties   ##car模块配置文件
+CAR_BIN_DIR=${CAR_DIR}/bin                           ##car模块脚本存放目录
+CAR_START_FILE=${CAR_BIN_DIR}/start-dyncar.sh       ##car模块启动脚本
+CAR_CONF_DIR=${CAR_DIR}/conf                       ##car模块conf目录
+CAR_PRO_FILE=${CAR_CONF_DIR}/application-pro.properties   ##car模块配置文件
 
 
 ## 安装的根目录，所有bigdata 相关的根目录
@@ -197,8 +197,8 @@ function config_projectconf()
 
          ## 修改配置文件 es安装节点
         echo "配置 project-conf.properties中的rocketmq地址"
-        rocketmq=$(grep 'ES_InstallNode' ${CLUSTER_CONF_FILE} | cut -d '=' -f2)
-        sed -i "s#es_service_node=.*#es_service_node=${rocketmq}#g" ${CONF_FILE}
+        es=$(grep 'ES_InstallNode' ${CLUSTER_CONF_FILE} | cut -d '=' -f2 | cut -d ';' -f1)
+        sed -i "s#es_service_node=.*#es_service_node=${es}#g" ${CONF_FILE}
 
         ## 修改配置文件 jdbc_service节点
          echo "配置 project-conf.properties中的jdbc_service地址"

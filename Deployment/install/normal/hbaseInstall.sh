@@ -61,34 +61,34 @@ for hostname in ${HBASE_HOSTNAME_ARRY[@]};do
     fi
 done
 
-echo ""  | tee  -a  $LOG_FILE
-echo ""  | tee  -a  $LOG_FILE
-echo "==================================================="  | tee -a $LOG_FILE
-echo "$(date "+%Y-%m-%d  %H:%M:%S")"                       | tee  -a  $LOG_FILE
+echo ""  | tee  -a  ${LOG_FILE}
+echo ""  | tee  -a  ${LOG_FILE}
+echo "==================================================="  | tee -a ${LOG_FILE}
+echo "$(date "+%Y-%m-%d  %H:%M:%S")"                       | tee  -a  ${LOG_FILE}
 
 ## 解压hbase tar 包
-echo ""  | tee -a $LOG_FILE
-echo "**********************************************" | tee -a $LOG_FILE
+echo ""  | tee -a ${LOG_FILE}
+echo "**********************************************" | tee -a ${LOG_FILE}
 
 cd  ${HBASE_SOURCE_DIR}
-#echo "解压hbase 中，please waiting...."   | tee  -a  $LOG_FILE
+#echo "解压hbase 中，please waiting...."   | tee  -a  ${LOG_FILE}
 #tar -xf hbase.tar.gz
 rm -rf ${HBASE_HOME}
 cp -r hbase ${HBASE_INSTALL_HOME} 
-#echo "解压hbase done......"  | tee  -a  $LOG_FILE
+#echo "解压hbase done......"  | tee  -a  ${LOG_FILE}
 cd -
 
 ## 设置hbase-env.sh java home
 cd ${HBASE_HOME}/conf
-echo ""  | tee -a $LOG_FILE
-echo "**********************************************" | tee -a $LOG_FILE
+echo ""  | tee -a ${LOG_FILE}
+echo "**********************************************" | tee -a ${LOG_FILE}
 sed -i "s#java_home#${JAVA_HOME}#g" hbase-env.sh 
-echo "设置jdk 路径........." | tee -a $LOG_FILE
+echo "设置jdk 路径........." | tee -a ${LOG_FILE}
 
 
 ## 设置regionserver 
-echo ""  | tee -a $LOG_FILE
-echo "**********************************************" | tee -a $LOG_FILE
+echo ""  | tee -a ${LOG_FILE}
+echo "**********************************************" | tee -a ${LOG_FILE}
 
 ## 配置regionservers文件 
 #num=$(sed -n '$=' ${CONF_DIR}/hostnamelists.properties)
@@ -97,7 +97,7 @@ echo "**********************************************" | tee -a $LOG_FILE
 #    hostname=$(sed -n "${i}p" ${CONF_DIR}/hostnamelists.properties)
 #    echo $hostname >> ${HBASE_HOME}/conf/regionservers
 #done
-#echo "设置regionservers done"  | tee -a $LOG_FILE
+#echo "设置regionservers done"  | tee -a ${LOG_FILE}
 
 ## 配置regionservers文件
 ## Hbase的从节点
@@ -106,36 +106,36 @@ for hostname in ${HBASE_HREGION_ARRY[@]}
 do
 	echo $hostname >> ${HBASE_HOME}/conf/regionservers
 done
-echo "设置regionservers done"  | tee -a $LOG_FILE
+echo "设置regionservers done"  | tee -a ${LOG_FILE}
 
 
 ## 设置hbase-site.xml
-echo ""  | tee -a $LOG_FILE
-echo "**********************************************" | tee -a $LOG_FILE
+echo ""  | tee -a ${LOG_FILE}
+echo "**********************************************" | tee -a ${LOG_FILE}
 cd ${HBASE_HOME}/conf
 mkdir -p ${HBASE_TMP_DIR}
 mkdir -p ${HBASE_ZK_DATADIR}
 sed -i "s#zkaddress#${ZK_LISTS}#g" hbase-site.xml
 sed -i "s#hbase_tmp_dir#${HBASE_TMP_DIR}#g" hbase-site.xml
 sed -i "s#hbase_zookeeper_dataDir#${HBASE_ZK_DATADIR}#g" hbase-site.xml
-echo  "配置Hbase-site.xml done ......"  | tee -a $LOG_FILE
+echo  "配置Hbase-site.xml done ......"  | tee -a ${LOG_FILE}
 
 
 ## 拷贝Hadoop 的两个文件到hbas conf 目录下，拷贝前先确认是否安装配置了HADOOP
-echo ""  | tee -a $LOG_FILE
-echo "**********************************************" | tee -a $LOG_FILE
+echo ""  | tee -a ${LOG_FILE}
+echo "**********************************************" | tee -a ${LOG_FILE}
 if [ -d ${HADOOP_HOME}/etc/hadoop ];then
     cp ${HADOOP_HOME}/etc/hadoop/core-site.xml ${HBASE_HOME}/conf
     cp ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml ${HBASE_HOME}/conf
-    echo "拷贝 core-site.xml, hdfs.xml"  | tee  -a  $LOG_FILE
+    echo "拷贝 core-site.xml, hdfs.xml"  | tee  -a  ${LOG_FILE}
 else
-    echo "hadoop 没有安装正确，请检查hadoop 的安装配置。"  | tee  -a  $LOG_FILE
+    echo "hadoop 没有安装正确，请检查hadoop 的安装配置。"  | tee  -a  ${LOG_FILE}
 fi
 
 ## 将HBase的UI地址写到指定文件中
-echo ""  | tee -a $LOG_FILE
-echo "**********************************************" | tee -a $LOG_FILE
-echo "准备将hbase的UI地址写到指定文件中............"    | tee -a $LOG_FILE
+echo ""  | tee -a ${LOG_FILE}
+echo "**********************************************" | tee -a ${LOG_FILE}
+echo "准备将hbase的UI地址写到指定文件中............"    | tee -a ${LOG_FILE}
 HBaseWebUI_Dir=$(grep WebUI_Dir ${CONF_DIR}/cluster_conf.properties|cut -d '=' -f2)
 HMASTER_IP=$(cat /etc/hosts|grep "$HBASE_HMASTER" | awk '{print $1}')
 HBase_UI="http://${HMASTER_IP}:60010"
@@ -150,14 +150,14 @@ fi
 
 
 ## 分发hbase 配置文件。
-echo ""  | tee -a $LOG_FILE
-echo "**********************************************" | tee -a $LOG_FILE
-echo "文件分发中，please waiting....."  | tee -a $LOG_FILE
+echo ""  | tee -a ${LOG_FILE}
+echo "**********************************************" | tee -a ${LOG_FILE}
+echo "文件分发中，please waiting....."  | tee -a ${LOG_FILE}
 for hostname in ${HBASE_HOSTNAME_ARRY[@]};do
     ssh $hostname "mkdir   -p ${HBASE_INSTALL_HOME}"
     rsync -rvl ${HBASE_HOME} root@${hostname}:${HBASE_INSTALL_HOME}  > /dev/null
     ssh $hostname "chmod -R 755 ${HBASE_HOME}"
 done
-echo "hbase 文件分发完成，安装完成......"  | tee  -a  $LOG_FILE
+echo "hbase 文件分发完成，安装完成......"  | tee  -a  ${LOG_FILE}
 
 set +x

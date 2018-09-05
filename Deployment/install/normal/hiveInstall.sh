@@ -109,7 +109,7 @@ do
     rsync -rvl ${HIVE_HOME}   root@${hostname}:${HIVE_INSTALL_HOME}  >/dev/null
     ssh root@${hostname}  "chmod -R 755   ${HIVE_HOME}"
 done 
-    echo “分发hive 安装配置done...”  | tee -a $LOG_FILE  
+    echo "分发hive 安装配置done..."  | tee -a $LOG_FILE
 	
 
 

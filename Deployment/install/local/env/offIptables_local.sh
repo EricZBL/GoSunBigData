@@ -29,6 +29,6 @@ echo "**************************************************" | tee  -a  $LOG_FILE
 echo "将/etc/selinux/config 里面 SELINUX 的配置 enforcing 改成 disabled ..." | tee -a $LOG_FILE
 sed -i "s#enforcing#disabled#g" /etc/selinux/config
 echo "准备关闭节点的防火墙..." | tee -a $LOG_FILE
-service iptables stop
-chkconfig iptables off
+systemctl stop firewalld.service
+systemctl disable firewalld.service
 echo "关闭防火墙成功!!!" | tee -a $LOG_FILE

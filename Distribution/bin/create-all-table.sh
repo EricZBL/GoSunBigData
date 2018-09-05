@@ -17,5 +17,8 @@ BIN_DIR=`pwd`                                          ### bin目录：脚本所
 sh ${BIN_DIR}/es/create-index.sh
 sh ${BIN_DIR}/hbase/bin/create-hbase-table.sh
 sh ${BIN_DIR}/phoenix/bin/create-phoenix-table.sh
+sh ${BIN_DIR}/spark/create-kafka-topic.sh
+sh ${BIN_DIR}/spark/create-sparksql-table.sh
+sh ${BIN_DIR}/spark/create-spark-udf.sh
 
 set +x
