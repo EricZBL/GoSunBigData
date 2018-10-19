@@ -20,7 +20,6 @@ INSERT INTO people.t_people_new (peopleid,month,deviceid,isconfirm,flag)
 SELECT peopleid,DATE_FORMAT(capturetime ,'%Y%m') ,deviceid,1,flag
 FROM t_people_recognize AS pr
 WHERE pr.flag = 1 AND DATE_FORMAT(capturetime ,'%Y%m')=DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 1 MONTH),'%Y%m')
-AND pr.community = (SELECT community FROM t_people AS p WHERE p.id = pr.peopleid)
 GROUP BY peopleid, deviceid
 HAVING COUNT(peopleid) >=${COUNT} AND COUNT(deviceid)>=${COUNT};
 EOF

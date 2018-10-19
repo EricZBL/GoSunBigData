@@ -14,6 +14,6 @@ FROM (
           AND (lasttime = DATE_SUB(now(),INTERVAL 3 MONTH)
           OR lasttime IS NULL)
 ) AS people LEFT JOIN t_picture
-ON people.id = t_picture.peopleid) AS out;
+ON people.id = t_picture.peopleid) AS o1;
 
 EOF
