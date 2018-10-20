@@ -1,6 +1,7 @@
 package com.hzgc.cluster.spark.consumer
 
-import java.sql.DriverManager
+import java.sql.{DriverManager, ResultSet}
+import java.text.SimpleDateFormat
 import java.util.{Date, Properties}
 
 import com.hzgc.cluster.spark.util.PropertiesUtil
@@ -14,8 +15,8 @@ import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 object KafkaToTidb {
+  val log: Logger = Logger.getLogger(KafkaToParquet.getClass)
   def main(args: Array[String]): Unit = {
-
     val properties:Properties = PropertiesUtil.getProperties
     val jdbcIp = properties.getProperty("job.kafkaToTidb.jdbc.ip")
     val driver = properties.getProperty("job.kafkaToTidb.driver")
@@ -30,7 +31,6 @@ object KafkaToTidb {
     classOf[com.mysql.jdbc.Driver]
     Class.forName(driver)
 
-    val log: Logger = Logger.getLogger(KafkaToParquet.getClass)
     val conf = new SparkConf().setAppName(appName)
     val ssc: StreamingContext = new StreamingContext(conf, Seconds(5))
     ssc.checkpoint(checpoint)
@@ -49,21 +49,29 @@ object KafkaToTidb {
     })
     //second1:窗口长度，second2:滑动间隔
     val result: DStream[(String, Int)] = windowed.reduceByKeyAndWindow((a: Int, b: Int) => a + b, Seconds(3600), Seconds(60))
-    result.filter(x=> x._2 >= 10).foreachRDD(it => {
-        it.foreachPartition(datas => {
-          val conn = DriverManager.getConnection(jdbc)
-          val prep = conn.prepareStatement("INSERT INTO t_imsi_reduce (imsi,number,savetime) VALUES (?, ?, ?) ")
-          datas.foreach(data => {
-            val imsi: String = data._1
-            val num = data._2
-            val time = new Date().getTime
+    result.filter(x=> x._2 >= 3).foreachRDD(it => {
+      it.foreachPartition(datas => {
+        val conn = DriverManager.getConnection(jdbc)
+        val prep = conn.prepareStatement("INSERT INTO t_imsi_filter (imsi,count,currenttime) VALUES (?, ?, ?) ")
+        val preps = conn.prepareStatement("SELECT imsi FROM t_imsi_filter WHERE imsi = ? AND currenttime = ?")
+        datas.foreach(f = data => {
+          val imsi: String = data._1
+          val num = data._2
+          val sdf = new SimpleDateFormat("yyyyMMdd")
+          val nowTime = new Date().getTime
+          val time = sdf.format(nowTime)
+          preps.setString(1, imsi)
+          preps.setString(2, time)
+          val result: ResultSet = preps.executeQuery()
+          if ( !result.next()) {
             prep.setString(1, imsi)
             prep.setInt(2, num)
-            prep.setLong(3, time)
+            prep.setString(3, time)
             prep.executeUpdate
-            log.info("===========imsi="+imsi+", num="+num+", time="+time)
-          })
+            log.info("===========imsi=" + imsi + ", num=" + num + ", time=" + time)
+          }
         })
+      })
     })
 
     ssc.start()
