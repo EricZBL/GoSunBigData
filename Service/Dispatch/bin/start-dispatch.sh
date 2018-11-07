@@ -13,7 +13,7 @@ BIN_DIR=`pwd`    ##bin目录地址
 cd ..
 HOME_DIR=`pwd`    ##host目录地址
 LIB_DIR=${HOME_DIR}/lib
-DISPATCH_JAR_NAME=`ls ${LIB_DIR} | grep ^dispatch-[0-9].[0-9].[0-9].jar$`
+DISPATCH_JAR_NAME=`ls ${LIB_DIR} | grep ^dispatch.jar$`
 DISPATCH_JAR=${LIB_DIR}/${DISPATCH_JAR_NAME}
 CONF_DIR=${HOME_DIR}/conf
 

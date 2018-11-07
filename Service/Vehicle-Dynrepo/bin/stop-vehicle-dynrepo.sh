@@ -13,7 +13,7 @@ cd ..
 HOME_DIR=`pwd`    ##host目录地址
 cd lib
 LIB_DIR=`pwd`
-VEHICLE_DYNREPO_JAR_NAME=`ls | grep ^vehicle-dynrepo-[0-9].[0-9].[0-9].jar$`
+VEHICLE_DYNREPO_JAR_NAME=`ls | grep ^vehicle-dynrepo.jar$`
 VEHICLE_DYNREPO_PID=`jps | grep ${VEHICLE_DYNREPO_JAR_NAME} | awk '{print $1}'`
 cd ..
 

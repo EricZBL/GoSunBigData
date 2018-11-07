@@ -7,5 +7,4 @@ exec java -jar app.jar \
 --zookeeper.host=${ZOOKEEPER_HOST} \
 --eureka.port=${EUREKA_PORT} \
 --mysql.host=${MYSQL_HOST} \
---query.time=${QUERY_TIME} \
 --kafka.host=${KAFKA_HOST}

@@ -4,12 +4,8 @@ import com.alibaba.druid.support.json.JSONUtils;
 import com.hzgc.common.service.error.RestErrorCode;
 import com.hzgc.common.service.response.ResponseResult;
 import com.hzgc.common.service.rest.BigDataPath;
-import com.hzgc.service.dispatch.param.*;
 import com.hzgc.common.util.json.JacksonUtil;
-import com.hzgc.service.dispatch.param.DispatchDTO;
-import com.hzgc.service.dispatch.param.DispatchVO;
-import com.hzgc.service.dispatch.param.SearchDispatchVO;
-import com.hzgc.service.dispatch.param.SearchDispatchDTO;
+import com.hzgc.service.dispatch.param.*;
 import com.hzgc.service.dispatch.service.DispatchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,10 +13,16 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @RestController
@@ -185,7 +187,9 @@ public class DispatchController {
     public ResponseResult <WarnHistoryVO> searchDeployRecognize(@RequestBody DispatchRecognizeDTO dispatchRecognizeDTO) {
         if (null == dispatchRecognizeDTO) {
             log.info("Dispatch search history param is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,"参数错误");
         }
+        log.info("Start query dispatch history, param is: " + JacksonUtil.toJson(dispatchRecognizeDTO));
         return dispatchService.searchDeployRecognize(dispatchRecognizeDTO);
     }
 
@@ -210,5 +214,22 @@ public class DispatchController {
         }
         log.info("Import excel data successfully");
         return ResponseResult.init(1);
+    }
+
+    /**
+     *  excel表格模板下载
+     */
+    @GetMapping("/template")
+    @ApiOperation("下载模板")
+    public ResponseEntity<byte[]> downloadTemplate() {
+        ClassPathResource cpr = new ClassPathResource("template/dispatch_excel.xlsx");
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDispositionFormData("dispatch", "dispatch_excel.xlsx");
+            byte[] bytes = FileCopyUtils.copyToByteArray(cpr.getInputStream());
+            return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            throw new RuntimeException("读取模板文件失败");
+        }
     }
 }

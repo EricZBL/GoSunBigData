@@ -11,12 +11,12 @@ import com.hzgc.common.util.basic.UuidUtil;
 import com.hzgc.common.util.json.JacksonUtil;
 import com.hzgc.jniface.FaceAttribute;
 import com.hzgc.jniface.FaceUtil;
-import com.hzgc.service.dispatch.util.DispatchExcelUtils;
 import com.hzgc.service.dispatch.dao.DispatchMapper;
 import com.hzgc.service.dispatch.dao.DispatchRecognizeMapper;
+import com.hzgc.service.dispatch.param.*;
+import com.hzgc.service.util.DispatchExcelUtils;
 import com.hzgc.service.dispatch.model.Dispatch;
 import com.hzgc.service.dispatch.model.DispatchRecognize;
-import com.hzgc.service.dispatch.param.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -32,9 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -77,18 +75,7 @@ public class DispatchService {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private void sendKafka(String key, Object data) {
-        try {
-            ListenableFuture <SendResult <String, String>> resultFuture =
-                    kafkaTemplate.send(kafkaTopic, key, JacksonUtil.toJson(data));
-            RecordMetadata metaData = resultFuture.get().getRecordMetadata();
-            ProducerRecord <String, String> producerRecord = resultFuture.get().getProducerRecord();
-            if (metaData != null) {
-                log.info("Send Kafka successfully! message:[topic:{}, key:{}, data:{}]",
-                        metaData.topic(), key, JacksonUtil.toJson(data));
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            log.error(e.getMessage());
-        }
+        kafkaTemplate.send(kafkaTopic, key, JacksonUtil.toJson(data));
     }
 
     //布控告警历史查询
@@ -128,11 +115,17 @@ public class DispatchService {
         PageInfo info = new PageInfo(page.getResult());
         int total = (int) info.getTotal();
         vo.setTotal(total);
+        Map<String, Long> regionMap = platformService.getAllRegionId();
         List <DispatchVO> list = new ArrayList <>();
         for (Dispatch dispatch : dispatchList) {
             DispatchVO dispatchVO = new DispatchVO();
             dispatchVO.setId(dispatch.getId());
             dispatchVO.setRegionId(dispatch.getRegion());
+            for(Map.Entry entry : regionMap.entrySet()) {
+                if (dispatch.getRegion().equals(entry.getValue())) {
+                    dispatchVO.setRegionName((String) entry.getKey());
+                }
+            }
             dispatchVO.setName(dispatch.getName());
             dispatchVO.setIdCard(dispatch.getIdcard());
             dispatchVO.setThreshold(dispatch.getThreshold());
@@ -334,14 +327,16 @@ public class DispatchService {
         if (excelMap == null || excelMap.size() == 0){
             return 0;
         }
-        List<Long> regionId_all = platformService.getAllRegionId();
+        Map<String, Long> regionMap = platformService.getAllRegionId();
+        Set<String> keys = regionMap.keySet();
+        List<String> regionNames = new ArrayList<>(keys);
         List<Dispatch> dispatchList = new ArrayList<>();
         for (int i = 1; i <= excelMap.size(); i++) {
             Map<Integer, Object> map = excelMap.get(i);
             Dispatch dispatch = new Dispatch();
-            if (map.get(0) != null && !"".equals(map.get(0)) &&
-                    regionId_all.contains(Long.valueOf(String.valueOf(map.get(0))))) {
-                dispatch.setRegion(Long.valueOf(String.valueOf(map.get(0))));
+            if (map.get(0) != null && !"".equals(map.get(0))
+                    && regionNames.contains(String.valueOf(map.get(0)))) {
+                dispatch.setRegion(regionMap.get(String.valueOf(map.get(0))));
             } else {
                 log.error("Region is error, please check line: " + i);
                 return 0;
@@ -349,21 +344,37 @@ public class DispatchService {
             if (map.get(1) != null && !"".equals(map.get(1))) {
                 dispatch.setName((String) map.get(1));
             }
-            if (map.get(2) != null && !"".equals(map.get(2)) &&
-                    DispatchExcelUtils.isCarNumber(String.valueOf(map.get(2)))) {
-                dispatch.setCar(String.valueOf(map.get(2)));
+            if (map.get(2) != null && !"".equals(map.get(2))) {
+                if (DispatchExcelUtils.isCarNumber(String.valueOf(map.get(2)))){
+                    dispatch.setCar(String.valueOf(map.get(2)));
+                }else {
+                    log.error("Car is error, please check line: " + i);
+                    return 0;
+                }
             }
-            if (map.get(3) != null && !"".equals(map.get(3)) &&
-                    DispatchExcelUtils.isCarNumber(String.valueOf(map.get(3)))) {
-                dispatch.setMac(String.valueOf(map.get(3)));
+            if (map.get(3) != null && !"".equals(map.get(3))){
+                if(DispatchExcelUtils.isMac(String.valueOf(map.get(3)))){
+                    dispatch.setMac(String.valueOf(map.get(3)));
+                }else{
+                    log.error("Mac is error, please check line: " + i);
+                    return 0;
+                }
             }
-            if (map.get(4) != null && !"".equals(map.get(4))
-                    && DispatchExcelUtils.isIdCard(String.valueOf(map.get(4)))) {
-                dispatch.setIdcard(String.valueOf(map.get(4)));
+            if (map.get(4) != null && !"".equals(map.get(4))){
+                if (DispatchExcelUtils.isIdCard(String.valueOf(map.get(4)))){
+                    dispatch.setIdcard(String.valueOf(map.get(4)));
+                }else {
+                    log.error("Idcard is error, please check line: " + i);
+                    return 0;
+                }
             }
-            if (map.get(5) != null && !"".equals(map.get(5)) &&
-                    DispatchExcelUtils.isThreshold(String.valueOf(map.get(5)))) {
-                dispatch.setThreshold(Float.valueOf(String.valueOf(map.get(5))));
+            if (map.get(5) != null && !"".equals(map.get(5))){
+                if (DispatchExcelUtils.isThreshold(String.valueOf(map.get(5)))){
+                    dispatch.setThreshold(Float.valueOf(String.valueOf(map.get(5))));
+                }else {
+                    log.error("Threshold is error, please check line: " + i);
+                    return 0;
+                }
             }
             if (map.get(6) != null && !"".equals(map.get(6))){
                 dispatch.setNotes(String.valueOf(map.get(6)));
@@ -385,7 +396,7 @@ public class DispatchService {
             dispatch.setId(UuidUtil.getUuid());
             int status = dispatchMapper.insertSelective(dispatch);
             if (status != 1) {
-                throw new RuntimeException("nsert into t_dispatch table failed");
+                throw new RuntimeException("Insert into t_dispatch table failed");
             }
             if (StringUtils.isNotBlank(dispatch.getCar()) && StringUtils.isNotBlank(dispatch.getMac())){
                 KafkaMessage message = new KafkaMessage();

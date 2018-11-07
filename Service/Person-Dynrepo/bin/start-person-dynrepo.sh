@@ -13,7 +13,7 @@ BIN_DIR=`pwd`    ##bin目录地址
 cd ..
 HOME_DIR=`pwd`    ##host目录地址
 LIB_DIR=${HOME_DIR}/lib
-PERSON_DYNREPO_JAR_NAME=`ls ${LIB_DIR} | grep ^person-dynrepo-[0-9].[0-9].[0-9].jar$`
+PERSON_DYNREPO_JAR_NAME=`ls ${LIB_DIR} | grep ^person-dynrepo.jar$`
 PERSON_DYNREPO_JAR=${LIB_DIR}/${PERSON_DYNREPO_JAR_NAME}
 CONF_DIR=${HOME_DIR}/conf
 

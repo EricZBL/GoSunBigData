@@ -4,12 +4,8 @@ import com.hzgc.cluster.spark.util.PropertiesUtil;
 import com.hzgc.common.collect.bean.FaceObject;
 import com.hzgc.common.service.facedynrepo.FaceTable;
 import com.hzgc.common.util.es.ElasticSearchHelper;
-import com.hzgc.jniface.FaceAttribute;
-import org.apache.log4j.Logger;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.rest.RestStatus;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -57,6 +53,7 @@ public class PutDataToEs implements Serializable {
             map.put(FaceTable.EYEGLASSES, faceObject.getAttribute().getEyeglasses());
             map.put(FaceTable.GENDER, faceObject.getAttribute().getGender());
             map.put(FaceTable.HUZI, faceObject.getAttribute().getHuzi());
+            map.put(FaceTable.SHARPNESS,faceObject.getAttribute().getSharpness());
             indexResponse = esClient.prepareIndex(FaceTable.DYNAMIC_INDEX,
                     FaceTable.PERSON_INDEX_TYPE, faceObject.getId()).setSource(map).get();
         }

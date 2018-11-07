@@ -14,7 +14,7 @@ cd ..
 DISPATCH_DIR=`pwd`    ##host目录地址
 cd lib
 LIB_DIR=`pwd`
-DISPATCH_JAR_NAME=`ls | grep ^dispatch-[0-9].[0-9].[0-9].jar$`
+DISPATCH_JAR_NAME=`ls | grep ^dispatch.jar$`
 DISPATCH_PID=`jps | grep ${DISPATCH_JAR_NAME} | awk '{print $1}'`
 cd ..
 

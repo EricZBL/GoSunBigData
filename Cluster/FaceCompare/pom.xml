@@ -18,4 +18,29 @@
         <module>Api</module>
         <module>Master</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>face-compare</groupId>
+                <artifactId>api</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>face-compare</groupId>
+                <artifactId>client</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>face-compare</groupId>
+                <artifactId>master</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>face-compare</groupId>
+                <artifactId>worker</artifactId>
+                <version>1.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

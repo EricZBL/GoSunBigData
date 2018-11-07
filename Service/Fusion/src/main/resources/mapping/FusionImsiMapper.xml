@@ -12,7 +12,7 @@
     id, peopleid, deviceid, receivetime, imsi
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_fusion_imsi
     where id = #{id,jdbcType=BIGINT}
@@ -23,16 +23,13 @@
   </delete>
   <insert id="insert" parameterType="com.hzgc.service.fusion.model.FusionImsi" >
     insert into t_fusion_imsi (id, peopleid, deviceid, community,
-      receivetime, imsi)
+    receivetime, imsi)
     values (#{id,jdbcType=BIGINT}, #{peopleid,jdbcType=VARCHAR}, #{deviceid,jdbcType=VARCHAR}, #{community,jdbcType=BIGINT},
-      #{receivetime,jdbcType=TIMESTAMP}, #{imsi,jdbcType=VARCHAR})
+    #{receivetime,jdbcType=TIMESTAMP}, #{imsi,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.hzgc.service.fusion.model.FusionImsi" >
     insert into t_fusion_imsi
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="peopleid != null" >
         peopleid,
       </if>
@@ -50,9 +47,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="peopleid != null" >
         #{peopleid,jdbcType=VARCHAR},
       </if>
@@ -91,9 +85,9 @@
   <update id="updateByPrimaryKey" parameterType="com.hzgc.service.fusion.model.FusionImsi" >
     update t_fusion_imsi
     set peopleid = #{peopleid,jdbcType=VARCHAR},
-      deviceid = #{deviceid,jdbcType=VARCHAR},
-      receivetime = #{receivetime,jdbcType=TIMESTAMP},
-      imsi = #{imsi,jdbcType=VARCHAR}
+    deviceid = #{deviceid,jdbcType=VARCHAR},
+    receivetime = #{receivetime,jdbcType=TIMESTAMP},
+    imsi = #{imsi,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#/bin/bash
+
 cd `dirname $0`
 HOME_DIR=`pwd`
 VERSION_INFO=2.3.0

@@ -1,0 +1,279 @@
+version: '2.3'
+
+services:
+  eureka:
+    image: registry.cn-hangzhou.aliyuncs.com/gosun/registry
+    container_name: eureka
+    restart: always
+    hostname: eureka
+    #network_mode: "host"
+    ports:
+    - "9000:9000"
+
+  mysql:
+    image: 172.18.18.122/mysql/mysql:5.7.19
+    container_name: mysql
+    restart: always
+    environment:
+    - SET_CONTAINER_TIMEZONE=true
+    - TZ=Asia/Shanghai
+    - MYSQL_ROOT_PASSWORD=Hzgc@123
+    hostname: mysql
+    ports:
+    - "3306:3306"
+    volumes:
+    - ${DOCKER_HOME}/mysql/data:/var/lib/mysql
+    - /etc/localtime:/etc/localtime:ro
+    - ${DOCKER_HOME}/mysql/sql/peopleDatabase.sql:/docker-entrypoint-initdb.d/peopleDatabase.sql
+  
+  mysql-cron:
+    image: 172.18.18.122/mysql/mysql-cron:5.7.19
+    container_name: mysql-cron
+    restart: always
+    links:
+    - mysql
+    environment:
+    - SET_CONTAINER_TIMEZONE=true
+    - TZ=Asia/Shanghai
+    - MYSQL_ROOT_PASSWORD=Hzgc@123
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ${DOCKER_HOME}/mysql/crontab/cronfile:/cronfile 
+  
+  zookeeper:
+    image: 172.18.18.122/hzgc/zookeeper:3.4.10
+    container_name: zookeeper
+    restart: always
+    environment:
+    - SET_CONTAINER_TIMEZONE=true
+    - TZ=Asia/Shanghai
+    hostname: zookeeper
+    ports:
+    - "2181:2181"
+    - "2888:2888"
+    - "3888:3888"
+    volumes:
+    - ${DOCKER_HOME}/zookeeper/data:/data
+    - ${DOCKER_HOME}/zookeeper/datalog:/datalog
+    - /etc/localtime:/etc/localtime:ro
+
+  kafka:
+    image: 172.18.18.122/hzgc/kafka:1.0.0
+    container_name: kafka
+    restart: always
+    #network_mode: "host"
+    depends_on:
+    - zookeeper
+    environment:
+    - SET_CONTAINER_TIMEZONE=true
+    - TZ=Asia/Shanghai
+    - KAFKA_ADVERTISED_HOST_NAME=${DOCKER_HOST_IP}
+    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${DOCKER_HOST_IP}:9092
+    - KAFKA_CREATE_TOPICS=face:1:1,car:1:1,person:1:1
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    hostname: kafka
+    ports:
+    - "9092:9092"
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /etc/localtime:/etc/localtime:ro
+    - ${DOCKER_HOME}/kafka/kafka-logs-kafka/:/kafka/kafka-logs-kafka/
+    - ${DOCKER_HOME}/kafka/logs:/opt/kafka/logs
+  
+  esearch:
+    image: 172.18.18.122/hzgc/elasticsearch-ik:5.5.0
+    container_name: esearch
+    restart: always
+    environment:
+    - discovery.type=single-node
+    hostname: esearch
+    ports:
+    - "9200:9200"
+    - "9300:9300"
+    volumes:
+    - ${DOCKER_HOME}/es/data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: 172.18.18.122/hzgc/kibaba:5.5.0
+    depends_on:
+    - esearch
+    container_name: kibana
+    restart: always
+    environment:
+    - SERVER_NAME=$DOCKER_HOST_IP
+    - ELASTICSEARCH_URL=http://esearch:9200
+    ports:
+    - "5601:5601"
+
+  collect:
+    image: 172.18.18.122/hzgc/collect:${VERSION}
+    depends_on:
+      - zookeeper
+      - eureka
+      - mysql
+    container_name: collect
+    restart: always
+    environment:
+      - EUREKA_IP=${EUREKA_HOST_IP}
+      - EUREKA_PORT=${EUREKA_HOST_PORT}
+      - ZOOKEEPER_HOST=${DOCKER_HOST_IP}:2181
+    network_mode: "host"
+    volumes:
+      - ${DOCKER_HOME}/collect/log:/log
+
+#  face-dynrepo:
+#    image: 172.18.18.122/hzgc/face-dynrepo:${VERSION}
+#    depends_on:
+#    - zookeeper
+#    - esearch
+#    - eureka
+#    - collect
+#    container_name: face-dynrepo
+#    restart: always
+#    environment:
+#    - EUREKA_IP=${EUREKA_HOST_IP}
+#    - EUREKA_PORT=${EUREKA_HOST_PORT}
+#    - ZOOKEEPER_HOST=${DOCKER_HOST_IP}:2181
+#    - ES_HOST=${DOCKER_HOST_IP}
+#    network_mode: "host"
+#    volumes:
+#    - ${DOCKER_HOME}/face-dynrepo/log:/log
+#
+#  person-dynrepo:
+#    image: 172.18.18.122/hzgc/person-dynrepo:${VERSION}
+#    depends_on:
+#    - zookeeper
+#    - esearch
+#    - eureka
+#    - collect
+#    container_name: person-dynrepo
+#    restart: always
+#    environment:
+#    - EUREKA_IP=${EUREKA_HOST_IP}
+#    - EUREKA_PORT=${EUREKA_HOST_PORT}
+#    - ZOOKEEPER_HOST=${DOCKER_HOST_IP}:2181
+#    - ES_HOST=${DOCKER_HOST_IP}
+#    network_mode: "host"
+#    volumes:
+#    - ${DOCKER_HOME}/person-dynrepo/log:/log
+#
+#  vehicle-dynrepo:
+#    image: 172.18.18.122/hzgc/vehicle-dynrepo:${VERSION}
+#    depends_on:
+#    - zookeeper
+#    - esearch
+#    - eureka
+#    - collect
+#    container_name: vehicle-dynrepo
+#    restart: always
+#    environment:
+#    - EUREKA_IP=${EUREKA_HOST_IP}
+#    - EUREKA_PORT=${EUREKA_HOST_PORT}
+#    - ZOOKEEPER_HOST=${DOCKER_HOST_IP}:2181
+#    - ES_HOST=${DOCKER_HOST_IP}
+#    network_mode: "host"
+#    volumes:
+#    - ${DOCKER_HOME}/vehicle-dynrepo/log:/log
+  
+#  people:
+#    image: 172.18.18.122/hzgc/people:${VERSION}
+#    depends_on:
+#    - mysql
+#    - eureka
+#    - collect
+#    container_name: people
+#    restart: always
+#    environment:
+#    - EUREKA_IP=${EUREKA_HOST_IP}
+#    - EUREKA_PORT=${EUREKA_HOST_PORT}
+#    - MYSQL_HOST=${EUREKA_HOST_IP}:3306
+#    - MYSQL_USERNAME=root
+#    - MYSQL_PASSOWRD=Hzgc@123
+#    network_mode: "host"
+#    volumes:
+#    - ${DOCKER_HOME}/people/log:/log
+  
+#  dispatch:
+#    image: 172.18.18.122/hzgc/dispatch:${VERSION}
+#    depends_on:
+#    - mysql
+#    - eureka
+#    - collect
+#    container_name: dispatch
+#    environment:
+#    - EUREKA_IP=${EUREKA_HOST_IP}
+#    - EUREKA_PORT=${EUREKA_HOST_PORT}
+#    - MYSQL_HOST=${EUREKA_HOST_IP}:3306
+#    - MYSQL_USERNAME=root
+#    - MYSQL_PASSWORD=Hzgc@123
+#    - KAFKA_HOST=${EUREKA_HOST_IP}:9092
+#    volumes:
+#    - ${DOCKER_HOME}/dispatch/log:/log
+  
+  imsi-dynrepo:
+    image: 172.18.18.122/hzgc/imsi-dynrepo:${VERSION}
+    depends_on:
+    - mysql
+    - eureka
+    - collect
+    container_name: imsi-dynrepo
+    environment:
+    - EUREKA_IP=${EUREKA_HOST_IP}
+    - EUREKA_PORT=${EUREKA_HOST_PORT}
+    - MYSQL_HOST=${EUREKA_HOST_IP}:3306
+    - MYSQL_USERNAME=root
+    - MYSQL_PASSWORD=Hzgc@123
+    - KAFKA_HOST=${EUREKA_HOST_IP}:9092
+    - ZOOKEEPER_HOST=${DOCKER_HOST_IP}:2181
+    - QUERY_TIME=30
+    volumes:
+    - ${DOCKER_HOME}/imsi-dynrepo/log:/log
+
+#  fusion:
+#    image: 172.18.18.122/hzgc/fusion:${VERSION}
+#    depends_on:
+#    - mysql
+#    - eureka
+#    - collect
+#    container_name: fusion
+#    restart: always
+#    environment:
+#    - EUREKA_IP=${EUREKA_HOST_IP}
+#    - EUREKA_PORT=${EUREKA_HOST_PORT}
+#    - ZOOKEEPER_HOST=${DOCKER_HOST_IP}:2181
+#    - MYSQL_HOST=${DOCKER_HOST_IP}:3306
+#    - QUERY_TIME=30
+#    - KAFKA_HOST=${DOCKER_HOST_IP}:9092
+#    network_mode: "host"
+#    volumes:
+#    - ${DOCKER_HOME}/fusion/log:/log
+
+
+#  collect-ftp:
+#    image: 172.18.18.122/hzgc/collect-ftp:1.0
+#    container_name: collect-ftp
+#    restart: always
+#    runtime: nvidia
+#    depends_on:
+#    - kafka
+#    - zookeeper
+#    hostname: collect-ftp
+#    environment:
+#    - ZOOKEEPER_HOST=${DOCKER_HOST_IP}:2181
+#    - HOST_IP=${DOCKER_HOST_IP}
+#    - DETECTOR_NUMBER=6
+#    - KAFKA_HOST=${DOCKER_HOST_IP}:9092
+#    - SEEMMO_URL=http://172.18.18.138:7000/ImgProcService/Recognize
+#    - HOME_DIR=/opt/ftpdata
+#    - BACKUP_DIR=/home/ftpdata
+#    - DETECTOR_ENABLE=true
+#    - EUREKA_IP=${EUREKA_HOST_IP}
+#    - EUREKA_PORT=${EUREKA_HOST_PORT}
+#    - LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/GsFaceLib/face_libs
+#    network_mode: "host"
+#    volumes:
+#    - ${DOCKER_LOG_HOME}/collect-ftp/log:/log
+#    - /opt/GsFaceLib:/opt/GsFaceLib
+#    - /lib64:/lib64
+#    - /opt/ftpdata:/opt/ftpdata
+#    - /home/ftpdata:/home/ftpdata

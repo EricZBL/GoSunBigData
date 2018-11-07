@@ -14,7 +14,7 @@ cd ..
 DISPATCH_BACKGROUND_DIR=`pwd`    ##host目录地址
 cd lib
 LIB_DIR=`pwd`
-DISPATCH_BACKGROUND_JAR_NAME=`ls | grep ^dispatch-background-[0-9].[0-9].[0-9].jar$`
+DISPATCH_BACKGROUND_JAR_NAME=`ls | grep ^dispatch-background.jar$`
 DISPATCH_BACKGROUND_PID=`jps | grep ${DISPATCH_BACKGROUND_JAR_NAME} | awk '{print $1}'`
 cd ..
 

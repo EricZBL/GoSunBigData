@@ -14,7 +14,7 @@ cd ..
 COLLECT_DIR=`pwd`                       ##collect目录地址
 LIB_DIR=${COLLECT_DIR}/lib              ##lib目录地址
 CONF_DIR=${COLLECT_DIR}/conf            ##conf目录地址
-COLLECT_JAR_NAME=`ls ${LIB_DIR} | grep ^collect-[0-9].[0-9].[0-9].jar$`
+COLLECT_JAR_NAME=`ls ${LIB_DIR} | grep ^collect.jar$`
 COLLECT_JAR_PID=`jps | grep ${COLLECT_JAR_NAME} | awk '{print $1}'`
 
 

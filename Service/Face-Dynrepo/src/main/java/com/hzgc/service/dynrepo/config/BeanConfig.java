@@ -1,6 +1,5 @@
 package com.hzgc.service.dynrepo.config;
 
-import com.hzgc.common.collect.facedis.FtpRegisterClient;
 import com.hzgc.common.service.faceattribute.service.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

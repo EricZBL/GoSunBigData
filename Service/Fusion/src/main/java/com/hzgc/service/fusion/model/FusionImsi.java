@@ -1,7 +1,6 @@
 package com.hzgc.service.fusion.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 public class FusionImsi implements Serializable {
@@ -13,7 +12,7 @@ public class FusionImsi implements Serializable {
 
     private Long community;
 
-    private Date receivetime;
+    private String receivetime;
 
     private String imsi;
 
@@ -41,11 +40,11 @@ public class FusionImsi implements Serializable {
         this.deviceid = deviceid == null ? null : deviceid.trim();
     }
 
-    public Date getReceivetime() {
+    public String getReceivetime() {
         return receivetime;
     }
 
-    public void setReceivetime(Date receivetime) {
+    public void setReceivetime(String receivetime) {
         this.receivetime = receivetime;
     }
 

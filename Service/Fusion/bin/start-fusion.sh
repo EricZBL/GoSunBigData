@@ -13,7 +13,7 @@ BIN_DIR=`pwd`    ##bin目录地址
 cd ..
 FUSION_DIR=`pwd`    ##host目录地址
 LIB_DIR=${FUSION_DIR}/lib
-FUSION_JAR_NAME=`ls ${LIB_DIR} | grep ^fusion-[0-9].[0-9].[0-9].jar$`
+FUSION_JAR_NAME=`ls ${LIB_DIR} | grep ^fusion.jar$`
 FUSION_JAR=${LIB_DIR}/${FUSION_JAR_NAME}
 CONF_DIR=${FUSION_DIR}/conf
 

@@ -14,7 +14,7 @@ cd ..
 FUSION_DIR=`pwd`    ##host目录地址
 cd lib
 LIB_DIR=`pwd`
-FUSION_JAR_NAME=`ls | grep ^fusion-[0-9].[0-9].[0-9].jar$`
+FUSION_JAR_NAME=`ls | grep ^fusion.jar$`
 FUSION_PID=`jps | grep ${FUSION_JAR_NAME} | awk '{print $1}'`
 cd ..
 

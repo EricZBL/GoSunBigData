@@ -137,6 +137,17 @@ public class BigDataPath {
     public static final String DISPATCH_UPDATE_DEPLOY = "/update";
     public static final String DISPATCH_SEARCH_HISTORY = "/search_recognize";
     public static final String DISPATCH_EXCEL_IMPORT = "/excel_import";
+    public static final String DISPATCH_INSERT_WHITE = "/insert_white";
+    public static final String DISPATCH_DELETE_WHITE = "/delete_white";
+    public static final String DISPATCH_UPDATE_WHITE = "/update_white";
+    public static final String DISPATCH_WHITE_STATUS = "/white_status";
+    public static final String DISPATCH_SEARCH_WHITE = "/search_white";
+    public static final String DISPATCH_INSERT_ALIVE = "/insert_alive";
+    public static final String DISPATCH_DELETE_ALIVE = "/delete_alive";
+    public static final String DISPATCH_UPDATE_ALIVE = "/update_alive";
+    public static final String DISPATCH_ALIVE_STATUS = "/alive_status";
+    public static final String DISPATCH_SEARCH_ALIVE = "/search_alive";
+    public static final String DISPATCH_EXCEL_TEMPLATE = "/template";
 
 
     public static final String OBJECTINFO_ADD = "/object_add";

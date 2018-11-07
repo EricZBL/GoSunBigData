@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <!-- 数据库驱动,需要选择本地的数据驱动包 -->
-    <classPathEntry location="/opt/software/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar"/>
+    <classPathEntry location="F:\\repository\\mysql\\mysql-connector-java\\5.1.38\\mysql-connector-java-5.1.38.jar"/>
     <context id="BigDataTables" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -19,24 +19,27 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!-- 指定生成模型的包名和位置-->
-        <javaModelGenerator targetPackage="com.hzgc.service.dispatch.model" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.hzgc.service.alive.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!-- 指定生成映射文件的位置-->
-        <sqlMapGenerator targetPackage="mapping" targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="alive-mapping" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!-- 生成DAO的包名和位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.hzgc.service.dispatch.dao"
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.hzgc.service.alive.dao"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainbjectame是实体类名-->
-        <table tableName="t_dispatch" domainObjectName="Dispatch" enableCountByExample="false"
+        <!--<table tableName="t_dispatch_white" domainObjectName="White" enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
-        <table tableName="t_dispatch_recognize" domainObjectName="DispatchRecognize" enableCountByExample="false"
+        <table tableName="t_dispatch_whiteinfo" domainObjectName="WhiteInfo" enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+        <table tableName="t_dispatch_alive" domainObjectName="Alive" enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
     </context>

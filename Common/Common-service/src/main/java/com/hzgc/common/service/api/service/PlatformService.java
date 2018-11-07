@@ -74,18 +74,21 @@ public class PlatformService {
      *
      * @return 区域ID集合
      */
-    public List<Long> getAllRegionId() {
-        List<Long> regionIdList = new ArrayList<>();
+    public Map<String, Long> getAllRegionId() {
         AreaCriteria areaCriteria = new AreaCriteria();
+        Map<String, Long> map = new HashMap<>();
         areaCriteria.setId(1L);
         areaCriteria.setLevel("district");
         AreaSDTO areaSDTO = restTemplate.postForObject("http://platform:8888/api/v1/region/internal/region/all/query_region_info", areaCriteria, AreaSDTO.class);
         List<AreaDTO> areaDTOs = areaSDTO.getAreaDTOs();
         for (AreaDTO areaDTO : areaDTOs){
-            regionIdList.add(areaDTO.getId());
+            String provinceName = areaDTO.getProvinceName();
+            String cityName = areaDTO.getCityName();
+            String districtName = areaDTO.getDistrictName();
+            String region = provinceName + cityName + districtName;
+            map.put(region,areaDTO.getId());
         }
-
-        return regionIdList;
+        return map;
     }
 
     /**
@@ -93,31 +96,32 @@ public class PlatformService {
      *
      * @return 小区ID集合
      */
-    public List<Long> getAllCommunityId() {
-        List<Long> regionIdList = new ArrayList<>();
+    public Map<String, Long> getAllCommunityId() {
+        Map<String, Long> map = new HashMap<>();
         AreaCriteria areaCriteria = new AreaCriteria();
         areaCriteria.setId(1L);
         areaCriteria.setLevel("region");
         AreaSDTO areaSDTO = restTemplate.postForObject("http://platform:8888/api/v1/region/internal/region/all/query_region_info", areaCriteria, AreaSDTO.class);
         List<AreaDTO> areaDTOs = areaSDTO.getAreaDTOs();
         for (AreaDTO areaDTO : areaDTOs){
-            regionIdList.add(areaDTO.getId());
+            String mergerName = areaDTO.getMergerName();
+            Long id = areaDTO.getId();
+            map.put(mergerName, id);
         }
-
-        return regionIdList;
+        return map;
     }
 
     /**
-     * 获取社区ID列表
+     * 获取省/市/区范围内的所有社区ID列表
      *
-     * @param regionId 区域ID
+     * @param id 省/市/区 ID
      * @return 社区ID列表
      */
-    public List<Long> getCommunityIdsByRegionId(Long regionId) {
-        if (regionId != null) {
-            log.debug("Method:getCommunityIdsByRegionId, regionId:" + regionId);
+    public List<Long> getCommunityIdsById(Long id) {
+        if (id != null) {
+            log.debug("Method:getCommunityIdsById, id:" + id);
             AreaCriteria criteria = new AreaCriteria();
-            criteria.setId(regionId);
+            criteria.setId(id);
             criteria.setLevel("region");
             AreaSDTO areaSDTO = restTemplate.postForObject(
                     "http://platform:8888/api/v1/region/internal/region/all/query_region_info",
@@ -132,10 +136,10 @@ public class PlatformService {
                 }
                 return communityIds;
             } else {
-                log.info("Get community ids by region id failed, because result is null");
+                log.info("Get community ids by id failed, because result is null");
             }
         } else {
-            log.error("Method:getCommunityIdsByRegionId, regionId is null");
+            log.error("Method:getCommunityIdsById, regionId is null");
         }
         return null;
     }

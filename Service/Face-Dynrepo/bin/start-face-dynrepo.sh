@@ -13,7 +13,7 @@ BIN_DIR=`pwd`    ##bin目录地址
 cd ..
 HOME_DIR=`pwd`    ##host目录地址
 LIB_DIR=${HOME_DIR}/lib
-FACE_DYNREPO_JAR_NAME=`ls ${LIB_DIR} | grep ^face-dynrepo-[0-9].[0-9].[0-9].jar$`
+FACE_DYNREPO_JAR_NAME=`ls ${LIB_DIR} | grep ^face-dynrepo.jar$`
 FACE_DYNREPO_JAR=${LIB_DIR}/${FACE_DYNREPO_JAR_NAME}
 CONF_DIR=${HOME_DIR}/conf
 

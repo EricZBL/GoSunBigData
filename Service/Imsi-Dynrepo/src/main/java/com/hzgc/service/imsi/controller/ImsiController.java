@@ -24,10 +24,10 @@ public class ImsiController {
     private ImsiService imsiService;
 
     @RequestMapping(value = BigDataPath.IMSI_SEARCH_BY_TIME, method = RequestMethod.GET)
-    public ResponseResult<List <ImsiInfo>> queryByTime(Long time) {
+    public List <ImsiInfo> queryByTime(Long time) {
         if (null == time) {
             log.error("Start search imsi by time, but search option is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,"参数不能为空");
+            return null;
         }
         log.info("Start search imsi by time, this time is: " + time);
         return imsiService.queryByTime(time);

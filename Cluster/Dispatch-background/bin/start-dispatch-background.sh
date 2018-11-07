@@ -13,7 +13,7 @@ BIN_DIR=`pwd`    ##bin目录地址
 cd ..
 DISPATCH_BACKGROUND_DIR=`pwd`    ##host目录地址
 LIB_DIR=${DISPATCH_BACKGROUND_DIR}/lib
-DISPATCH_BACKGROUND_JAR_NAME=`ls ${LIB_DIR} | grep ^dispatch-background-[0-9].[0-9].[0-9].jar$`
+DISPATCH_BACKGROUND_JAR_NAME=`ls ${LIB_DIR} | grep ^dispatch-background.jar$`
 DISPATCH_BACKGROUND_JAR=${LIB_DIR}/${DISPATCH_BACKGROUND_JAR_NAME}
 CONF_DIR=${DISPATCH_BACKGROUND_DIR}/conf
 

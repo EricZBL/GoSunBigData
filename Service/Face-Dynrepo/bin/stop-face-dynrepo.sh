@@ -13,7 +13,7 @@ cd ..
 HOME_DIR=`pwd`    ##host目录地址
 cd lib
 LIB_DIR=`pwd`
-FACE_DYNREPO_JAR_NAME=`ls | grep ^face-dynrepo-[0-9].[0-9].[0-9].jar$`
+FACE_DYNREPO_JAR_NAME=`ls | grep ^face-dynrepo.jar$`
 FACE_DYNREPO_PID=`jps | grep ${FACE_DYNREPO_JAR_NAME} | awk '{print $1}'`
 cd ..
 

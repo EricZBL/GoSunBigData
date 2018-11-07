@@ -5,29 +5,28 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzgc.common.service.api.service.InnerService;
 import com.hzgc.common.service.api.service.PlatformService;
-import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.peoman.SyncPeopleManager;
 import com.hzgc.common.util.basic.UuidUtil;
 import com.hzgc.common.util.json.JacksonUtil;
 import com.hzgc.jniface.FaceAttribute;
 import com.hzgc.jniface.FaceUtil;
-import com.hzgc.service.Util.PeopleExcelUtils;
-import com.hzgc.service.people.controller.PeopleController;
 import com.hzgc.service.people.dao.*;
 import com.hzgc.service.people.fields.Flag;
 import com.hzgc.service.people.model.*;
 import com.hzgc.service.people.param.*;
+import com.hzgc.service.people.util.PeopleExcelUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -68,11 +67,22 @@ public class PeopleService {
     @SuppressWarnings("unused")
     private InnerService innerService;
 
+    @Autowired
+    @SuppressWarnings("unused")
+    //Spring-kafka-template
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    private final static String TOPIC = "PeoMan-Inner";
+
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private final static String IDCARD_PIC = "idcardpic";
 
     private final static String CAPTURE_PIC = "capturepic";
+
+    private void sendKafka(String key, Object data) {
+        kafkaTemplate.send(TOPIC, key, JacksonUtil.toJson(data));
+    }
 
     public boolean CheckIdCard(String idCard) {
         People people = peopleMapper.searchPeopleByIdCard(idCard);
@@ -183,6 +193,10 @@ public class PeopleService {
             }
         }
         log.info("Insert people info successfully");
+        SyncPeopleManager manager = new SyncPeopleManager();
+        manager.setType("2");
+        manager.setPersonid(people.getId());
+        this.sendKafka("ADD", manager);
         ReturnMessage message = new ReturnMessage();
         message.setStatus(1);
         message.setMessage("添加成功");
@@ -193,7 +207,7 @@ public class PeopleService {
     public ReturnMessage updatePeople(PeopleDTO peopleDTO) {
         People people = peopleDTO.peopleDTOShift_update(peopleDTO);
         log.info("Start update t_people, param is:" + JacksonUtil.toJson(people));
-        Integer status_people_update = people_update(people);
+        int status_people_update = peopleMapper.updateByPrimaryKeySelective(people);
         if (status_people_update != 1) {
             log.info("Update t_people failed");
             ReturnMessage message = new ReturnMessage();
@@ -203,7 +217,7 @@ public class PeopleService {
         }
         log.info("Update people to t_people successfully");
         List<Long> t_flag_ids = flagMapper.selectIdByPeopleId(people.getId());
-        if (t_flag_ids != null && t_flag_ids.size() > 0){
+        if (t_flag_ids != null && t_flag_ids.size() > 0) {
             for (Long id : t_flag_ids) {
                 int status = flagMapper.deleteByPrimaryKey(id);
                 if (status != 1) {
@@ -321,7 +335,7 @@ public class PeopleService {
                 return message;
             }
         }
-        if (peopleDTO.getCar() != null && peopleDTO.getCar().size() > 0){
+        if (peopleDTO.getCar() != null && peopleDTO.getCar().size() > 0) {
             for (String s : peopleDTO.getCar()) {
                 Car car = new Car();
                 car.setPeopleid(people.getId());
@@ -347,7 +361,7 @@ public class PeopleService {
                 return message;
             }
         }
-        if (peopleDTO.getIdCardPic() != null && peopleDTO.getIdCardPic().size() > 0){
+        if (peopleDTO.getIdCardPic() != null && peopleDTO.getIdCardPic().size() > 0) {
             for (String photo : peopleDTO.getIdCardPic()) {
                 PictureWithBLOBs picture = new PictureWithBLOBs();
                 picture.setPeopleid(people.getId());
@@ -369,7 +383,7 @@ public class PeopleService {
                 }
             }
         }
-        if (peopleDTO.getCapturePic() != null && peopleDTO.getCapturePic().size() > 0){
+        if (peopleDTO.getCapturePic() != null && peopleDTO.getCapturePic().size() > 0) {
             for (String photo : peopleDTO.getCapturePic()) {
                 PictureWithBLOBs picture = new PictureWithBLOBs();
                 picture.setPeopleid(people.getId());
@@ -392,6 +406,10 @@ public class PeopleService {
             }
         }
         log.info("Update people info successfully");
+        SyncPeopleManager manager = new SyncPeopleManager();
+        manager.setType("3");
+        manager.setPersonid(people.getId());
+        this.sendKafka("UPDATE", manager);
         ReturnMessage message = new ReturnMessage();
         message.setStatus(1);
         message.setMessage("修改成功");
@@ -400,10 +418,6 @@ public class PeopleService {
 
     private Integer people_insert(People people) {
         return peopleMapper.insertSelective(people);
-    }
-
-    private Integer people_update(People people) {
-        return peopleMapper.updateByPrimaryKeySelective(people);
     }
 
     private Integer people_flag_insert(String peopleId, List<Integer> flags) {
@@ -415,29 +429,6 @@ public class PeopleService {
             int status = flagMapper.insertSelective(flag);
             if (status != 1) {
                 log.info("Insert people, but insert t_flag failed");
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    private Integer people_flag_update(String peopleId, List<Integer> flags) {
-        List<Long> idList = flagMapper.selectIdByPeopleId(peopleId);
-        for (Long id : idList) {
-            int status = flagMapper.deleteByPrimaryKey(id);
-            if (status != 1) {
-                log.info("Update people, but delete t_flag failed, id: " + id);
-                return 0;
-            }
-        }
-        for (Integer integer : flags) {
-            com.hzgc.service.people.model.Flag flag = new com.hzgc.service.people.model.Flag();
-            flag.setPeopleid(peopleId);
-            flag.setFlagid(integer);
-            flag.setFlag(Flag.getFlag(integer));
-            int insertStatus = flagMapper.insertSelective(flag);
-            if (insertStatus != 1) {
-                log.info("Update people, but insert flag to t_flag failed, flag:" + integer);
                 return 0;
             }
         }
@@ -471,41 +462,6 @@ public class PeopleService {
         return 1;
     }
 
-    private Integer people_picture_update(String peopleId, String picType, List<String> pics) {
-        List<Long> idList = pictureMapper.selectIdByPeopleId(peopleId);
-        for (Long id : idList) {
-            int status = pictureMapper.deleteByPrimaryKey(id);
-            if (status != 1) {
-                log.info("Update people, but delete t_picture failed, id: " + id);
-                return 0;
-            }
-        }
-        for (String photo : pics) {
-            PictureWithBLOBs picture = new PictureWithBLOBs();
-            picture.setPeopleid(peopleId);
-            byte[] bytes = FaceUtil.base64Str2BitFeature(photo);
-            if (IDCARD_PIC.equals(picType)) {
-                picture.setIdcardpic(bytes);
-            }
-            if (CAPTURE_PIC.equals(picType)) {
-                picture.setCapturepic(bytes);
-            }
-            FaceAttribute faceAttribute = innerService.faceFeautreCheck(photo).getFeature();
-            if (faceAttribute == null || faceAttribute.getFeature() == null || faceAttribute.getBitFeature() == null) {
-                log.error("Face feature extract failed, insert picture to t_picture failed");
-                throw new RuntimeException("Face feature extract failed, insert picture to t_picture failed");
-            }
-            picture.setFeature(FaceUtil.floatFeature2Base64Str(faceAttribute.getFeature()));
-            picture.setBitfeature(FaceUtil.bitFeautre2Base64Str(faceAttribute.getBitFeature()));
-            int insertStatus = pictureMapper.insertSelective(picture);
-            if (insertStatus != 1) {
-                log.info("Update people, but insert picture to t_picture failed");
-                return 0;
-            }
-        }
-        return 1;
-    }
-
     private Integer people_imsi_insert(String peopleId, List<String> imsis) {
         for (String s : imsis) {
             Imsi imsi = new Imsi();
@@ -514,28 +470,6 @@ public class PeopleService {
             int status = imsiMapper.insertSelective(imsi);
             if (status != 1) {
                 log.info("Insert people, but insert imsi to t_imsi failed");
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    private Integer people_imsi_update(String peopleId, List<String> imsis) {
-        List<Long> idList = imsiMapper.selectIdByPeopleId(peopleId);
-        for (Long id : idList) {
-            int status = imsiMapper.deleteByPrimaryKey(id);
-            if (status != 1) {
-                log.info("Update people, but delete t_imsi failed, id: " + id);
-                return 0;
-            }
-        }
-        for (String s : imsis) {
-            Imsi imsi = new Imsi();
-            imsi.setPeopleid(peopleId);
-            imsi.setImsi(s);
-            int insertStatus = imsiMapper.insertSelective(imsi);
-            if (insertStatus != 1) {
-                log.info("Update people, but insert imsi to t_imsi failed, imsi: " + s);
                 return 0;
             }
         }
@@ -556,28 +490,6 @@ public class PeopleService {
         return 1;
     }
 
-    private Integer people_phone_update(String peopleId, List<String> phones) {
-        List<Long> idList = phoneMapper.selectIdByPeopleId(peopleId);
-        for (Long id : idList) {
-            int status = phoneMapper.deleteByPrimaryKey(id);
-            if (status != 1) {
-                log.info("Update people, but delete t_phone failed, id: " + id);
-                return 0;
-            }
-        }
-        for (String s : phones) {
-            Phone phone = new Phone();
-            phone.setPeopleid(peopleId);
-            phone.setPhone(s);
-            int insertStatus = phoneMapper.insertSelective(phone);
-            if (insertStatus != 1) {
-                log.info("Update people, but insert phone to t_phone failed, phone: " + s);
-                return 0;
-            }
-        }
-        return 1;
-    }
-
     private Integer people_house_insert(String peopleId, List<String> houses) {
         for (String s : houses) {
             House house = new House();
@@ -592,28 +504,6 @@ public class PeopleService {
         return 1;
     }
 
-    private Integer people_house_update(String peopleId, List<String> houses) {
-        List<Long> idList = houseMapper.selectIdByPeopleId(peopleId);
-        for (Long id : idList) {
-            int status = houseMapper.deleteByPrimaryKey(id);
-            if (status != 1) {
-                log.info("Update people, but delete t_house failed, id: " + id);
-                return 0;
-            }
-        }
-        for (String s : houses) {
-            House house = new House();
-            house.setPeopleid(peopleId);
-            house.setHouse(s);
-            int insertStatus = houseMapper.insertSelective(house);
-            if (insertStatus != 1) {
-                log.info("Update people, but insert house to t_house failed, house: " + s);
-                return 0;
-            }
-        }
-        return 1;
-    }
-
     private Integer people_car_insert(String peopleId, List<String> cars) {
         for (String s : cars) {
             Car car = new Car();
@@ -622,28 +512,6 @@ public class PeopleService {
             int status = carMapper.insertSelective(car);
             if (status != 1) {
                 log.info("Insert people, but insert car to t_car failed");
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    private Integer people_car_update(String peopleId, List<String> cars) {
-        List<Long> idList = carMapper.selectIdByPeopleId(peopleId);
-        for (Long id : idList) {
-            int status = carMapper.deleteByPrimaryKey(id);
-            if (status != 1) {
-                log.info("Update people, but delete t_car failed, id: " + id);
-                return 0;
-            }
-        }
-        for (String s : cars) {
-            Car car = new Car();
-            car.setPeopleid(peopleId);
-            car.setCar(s);
-            int insertStatus = carMapper.insertSelective(car);
-            if (insertStatus != 1) {
-                log.info("Update people, but insert car to t_car failed, car: " + s);
                 return 0;
             }
         }
@@ -838,8 +706,10 @@ public class PeopleService {
         return vo;
     }
 
-    public List<Long> searchCommunityIdsByRegionId(Long regionId) {
-        return peopleMapper.searchCommunityIdsByRegionId(regionId);
+    public List<Long> searchCommunityIdsById(Long id) {
+        List<Long> communityIds = platformService.getCommunityIdsById(id);
+        log.info("Search platform service, community id list:" + JacksonUtil.toJson(communityIds));
+        return peopleMapper.getCommunityIdsById(communityIds);
     }
 
     public PeopleVO searchPeopleByIdCard(String idCard) {
@@ -869,7 +739,7 @@ public class PeopleService {
         return peopleVO;
     }
 
-    public Integer excelImport(MultipartFile file){
+    public Integer excelImport(MultipartFile file) {
         PeopleExcelUtils excelUtils = new PeopleExcelUtils(file);
         Map<Integer, Map<Integer, Object>> excelMap = null;
         try {
@@ -878,13 +748,18 @@ public class PeopleService {
             log.error("Import excel data failed, because read excel error");
             e.printStackTrace();
         }
-        if (excelMap == null || excelMap.size() == 0){
+        if (excelMap == null || excelMap.size() == 0) {
             return 0;
         }
-        List<Long> regionId_all = platformService.getAllRegionId();
-        List<Long> communityId_all = platformService.getAllCommunityId();
+
         List<PeopleDTO> peopleDTOList = new ArrayList<>();
         for (int i = 1; i <= excelMap.size(); i++) {
+            Map<String, Long> regionMap = platformService.getAllRegionId();
+            Set<String> regionKeys = regionMap.keySet();
+            List<String> regionNames = new ArrayList<>(regionKeys);
+            Map<String, Long> communityMap = platformService.getAllCommunityId();
+            Set<String> communityKeys = communityMap.keySet();
+            List<String> communityNames = new ArrayList<>(communityKeys);
             Map<Integer, Object> map = excelMap.get(i);
             PeopleDTO peopleDTO = new PeopleDTO();
             if (map.get(0) != null && !"".equals(map.get(0))) {
@@ -900,47 +775,46 @@ public class PeopleService {
                 log.error("Import excel data failed, because idCard is error, please check line: " + i);
                 return 0;
             }
-            if (map.get(2) != null && !"".equals(map.get(2)) &&
-                    regionId_all.contains(Long.valueOf(String.valueOf(map.get(2))))) {
-                peopleDTO.setRegion(Long.valueOf(String.valueOf(map.get(2))));
+            if (map.get(2) != null && !"".equals(map.get(2))
+                    && regionNames.contains(String.valueOf(map.get(2)))){
+                peopleDTO.setRegion(regionMap.get(String.valueOf(map.get(2))));
             } else {
-                log.error("Import excel data failed, because region id is error, please check line: " + i);
+                log.error("Import excel data failed, because region is error, please check line: " + i);
                 return 0;
             }
             if (map.get(3) != null && !"".equals(map.get(3))){
-                Long communityId = Long.valueOf(String.valueOf(map.get(3)));
-                if (communityId_all.contains(communityId)){
-                    peopleDTO.setCommunity(communityId);
+                if (communityNames.contains(String.valueOf(map.get(3)))){
+                    peopleDTO.setCommunity(communityMap.get(String.valueOf(map.get(3))));
                 }else {
                     log.error("Import excel data failed, because community is error, please check line: " + i);
                     return 0;
                 }
             }
-            if (map.get(4) != null && "".equals(map.get(4))){
+            if (map.get(4) != null && !"".equals(map.get(4))) {
                 peopleDTO.setSex(String.valueOf(map.get(4)));
             }
-            if (map.get(5) != null && "".equals(map.get(5))) {
-                peopleDTO.setAge(Integer.valueOf(String.valueOf(map.get(5))));
+            if (map.get(5) != null && !"".equals(map.get(5))) {
+                peopleDTO.setAge(Float.valueOf(String.valueOf(map.get(5))).intValue());
             }
-            if (map.get(6) != null && "".equals(map.get(6))) {
+            if (map.get(6) != null && !"".equals(map.get(6))) {
                 peopleDTO.setJob(String.valueOf(map.get(6)));
             }
-            if (map.get(7) != null && "".equals(map.get(7))) {
+            if (map.get(7) != null && !"".equals(map.get(7))) {
                 peopleDTO.setBirthday(String.valueOf(map.get(7)));
             }
-            if (map.get(8) != null && "".equals(map.get(8))) {
+            if (map.get(8) != null && !"".equals(map.get(8))) {
                 peopleDTO.setAddress(String.valueOf(map.get(8)));
             }
-            if (map.get(9) != null && "".equals(map.get(9))) {
+            if (map.get(9) != null && !"".equals(map.get(9))) {
                 peopleDTO.setHousehold(String.valueOf(map.get(9)));
             }
-            if (map.get(10) != null && "".equals(map.get(10))) {
+            if (map.get(10) != null && !"".equals(map.get(10))) {
                 peopleDTO.setBirthplace(String.valueOf(map.get(10)));
             }
-            if (map.get(11) != null && "".equals(map.get(11))) {
+            if (map.get(11) != null && !"".equals(map.get(11))) {
                 peopleDTO.setPolitic(String.valueOf(map.get(11)));
             }
-            if (map.get(12) != null && "".equals(map.get(12))) {
+            if (map.get(12) != null && !"".equals(map.get(12))) {
                 peopleDTO.setEduLevel(String.valueOf(12));
             }
             peopleDTOList.add(peopleDTO);
@@ -957,8 +831,9 @@ public class PeopleService {
     @Transactional(rollbackFor = Exception.class)
     private Integer excelImport(List<PeopleDTO> peopleDTOList) {
         for (PeopleDTO peopleDTO : peopleDTOList) {
+            peopleDTO.setId(UuidUtil.getUuid());
             ReturnMessage message = this.insertPeople(peopleDTO);
-            if (message == null || message.getStatus() != 1){
+            if (message == null || message.getStatus() != 1) {
                 throw new RuntimeException("Insert into t_people table failed");
             }
         }

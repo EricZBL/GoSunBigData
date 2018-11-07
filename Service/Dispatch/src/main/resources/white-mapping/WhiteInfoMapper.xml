@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hzgc.service.white.dao.WhiteInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hzgc.service.white.model.WhiteInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="white_id" property="whiteId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="feature" property="feature" jdbcType="VARCHAR" />
+    <result column="bit_feature" property="bitFeature" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hzgc.service.white.model.WhiteInfo" extends="BaseResultMap" >
+    <result column="picture" property="picture" jdbcType="LONGVARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, white_id, name, feature, bit_feature
+  </sql>
+  <sql id="Blob_Column_List" >
+    picture
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_dispatch_whiteinfo
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByWhiteId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, white_id, name
+    from t_dispatch_whiteinfo
+    where white_id = #{whiteid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_dispatch_whiteinfo
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hzgc.service.white.model.WhiteInfo" >
+    insert into t_dispatch_whiteinfo (id, white_id, name, 
+      feature, bit_feature, picture
+      )
+    values (#{id,jdbcType=BIGINT}, #{whiteId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{feature,jdbcType=VARCHAR}, #{bitFeature,jdbcType=VARCHAR}, #{picture,jdbcType=LONGVARBINARY}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hzgc.service.white.model.WhiteInfo" >
+    insert into t_dispatch_whiteinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="whiteId != null" >
+        white_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="feature != null" >
+        feature,
+      </if>
+      <if test="bitFeature != null" >
+        bit_feature,
+      </if>
+      <if test="picture != null" >
+        picture,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="whiteId != null" >
+        #{whiteId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="feature != null" >
+        #{feature,jdbcType=VARCHAR},
+      </if>
+      <if test="bitFeature != null" >
+        #{bitFeature,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        #{picture,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hzgc.service.white.model.WhiteInfo" >
+    update t_dispatch_whiteinfo
+    <set >
+      <if test="whiteId != null" >
+        white_id = #{whiteId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="feature != null" >
+        feature = #{feature,jdbcType=VARCHAR},
+      </if>
+      <if test="bitFeature != null" >
+        bit_feature = #{bitFeature,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        picture = #{picture,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hzgc.service.white.model.WhiteInfo" >
+    update t_dispatch_whiteinfo
+    set white_id = #{whiteId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      feature = #{feature,jdbcType=VARCHAR},
+      bit_feature = #{bitFeature,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=LONGVARBINARY}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hzgc.service.white.model.WhiteInfo" >
+    update t_dispatch_whiteinfo
+    set white_id = #{whiteId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      feature = #{feature,jdbcType=VARCHAR},
+      bit_feature = #{bitFeature,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
