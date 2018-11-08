@@ -29,7 +29,7 @@
             <includes>
                 <include>create-all-table.sh</include>
             </includes>
-            <outputDirectory>project/bin</outputDirectory>
+            <outputDirectory>normal/project/bin</outputDirectory>
         </fileSet>
 
         <!--peoplemanager-background-->
@@ -39,21 +39,21 @@
             <includes>
                 <include>peoman-client-1.0.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/peoplemanager/peoplemanager-client/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/peoplemanager/peoplemanager-client/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/PeopleManager-background/PeopleManager-background-client/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/peoplemanager/peoplemanager-client/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/peoplemanager/peoplemanager-client/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/PeopleManager-background/PeopleManager-background-client/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/peoplemanager/peoplemanager-client/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/peoplemanager/peoplemanager-client/conf</outputDirectory>
         </fileSet>
         <!--peoplemanager-background-worker-->
         <fileSet>
@@ -61,21 +61,21 @@
             <includes>
                 <include>peoman-worker-1.0.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/peoplemanager/peoplemanager-worker/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/peoplemanager/peoplemanager-worker/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/PeopleManager-background/PeopleManager-background-worker/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/peoplemanager/peoplemanager-worker/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/peoplemanager/peoplemanager-worker/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/PeopleManager-background/PeopleManager-background-worker/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/peoplemanager/peoplemanager-worker/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/peoplemanager/peoplemanager-worker/conf</outputDirectory>
         </fileSet>
 
         <!--spark目录-->
@@ -84,14 +84,14 @@
             <excludes>
                 <exclude>config-clusterconf.sh</exclude>
             </excludes>
-            <outputDirectory>component/GoSunBigData/Cluster/spark</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/spark</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Spark/target/spark-${project.parent.version}/bin</directory>
             <includes>
                 <include>create-kafka-topic.sh</include>
             </includes>
-            <outputDirectory>project/bin/spark</outputDirectory>
+            <outputDirectory>normal/project/bin/spark</outputDirectory>
         </fileSet>
 
         <!--Dispatch-background目录-->
@@ -100,21 +100,21 @@
             <includes>
                 <include>dispatch-background-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/dispatch-background/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/dispatch-background/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Dispatch-background/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/dispatch-background/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/dispatch-background/conf</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Dispatch-background/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/dispatch-background/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/dispatch-background/bin</outputDirectory>
         </fileSet>
 
         <!--spark-udf目录-->
@@ -123,21 +123,21 @@
             <includes>
                 <include>spark-udf-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/spark/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/spark/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Spark-udf/target/</directory>
             <includes>
                 <include>spark-udf-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>project/bin/spark/lib</outputDirectory>
+            <outputDirectory>normal/project/bin/spark/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Spark-udf/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>project/bin/spark</outputDirectory>
+            <outputDirectory>normal/project/bin/spark</outputDirectory>
         </fileSet>
 
         <!--azkaban-->
@@ -146,7 +146,7 @@
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/azkaban</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/azkaban</outputDirectory>
         </fileSet>
 
         <!--FaceCompare相关配置-->
@@ -155,63 +155,63 @@
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/conf</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/FaceCompare/Master/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/conf</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/FaceCompare/Worker/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/FaceCompare/Master/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/FaceCompare/Worker/target/worker-1.0/lib</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/FaceCompare/Master/target/master-1.0/lib</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/FaceCompare/Worker/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/FaceCompare/Master/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/FaceCompare/Client/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Cluster/FaceCompare/client</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Cluster/FaceCompare/client</outputDirectory>
         </fileSet>
 
         <!--cloudService-->
@@ -221,21 +221,21 @@
             <includes>
                 <include>fusion-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/fusion/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/fusion/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Fusion/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/fusion/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/fusion/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Fusion/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/fusion/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/fusion/conf</outputDirectory>
         </fileSet>
         <!--Dispatch目录-->
         <fileSet>
@@ -243,21 +243,21 @@
             <includes>
                 <include>dipatch-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/dispatch/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/dispatch/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Dispatch/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/dispatch/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/dispatch/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Dispatch/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/dispatch/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/dispatch/conf</outputDirectory>
         </fileSet>
         <!--Imsi-Dynrepo目录-->
         <fileSet>
@@ -265,21 +265,21 @@
             <includes>
                 <include>imsi-dynrepo-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/imsi-dynrepo/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/imsi-dynrepo/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Imsi-Dynrepo/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/imsi-dynrepo/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/imsi-dynrepo/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Imsi-Dynrepo/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/imsi-dynrepo/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/imsi-dynrepo/conf</outputDirectory>
         </fileSet>
         <!--People目录-->
         <fileSet>
@@ -287,21 +287,21 @@
             <includes>
                 <include>people-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/people/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/people/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/People/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/people/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/people/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/People/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Cloud/people/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Cloud/people/conf</outputDirectory>
         </fileSet>
 
         <!--BasicService目录-->
@@ -311,21 +311,21 @@
             <includes>
                 <include>collect-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/collect/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/collect/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Collect/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/collect/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/collect/conf</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Collect/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/collect/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/collect/bin</outputDirectory>
         </fileSet>
         <!--Face-Dispatch目录-->
         <fileSet>
@@ -333,21 +333,21 @@
             <includes>
                 <include>face-dispatch-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/face-dispatch/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dispatch/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Face-Dispatch/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/face-dispatch/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dispatch/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Face-Dispatch/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/face-dispatch/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dispatch/conf</outputDirectory>
         </fileSet>
         <!--Face-Dynrepo目录-->
         <fileSet>
@@ -355,21 +355,21 @@
             <includes>
                 <include>face-dynrepo-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/face-dynrepo/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dynrepo/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Face-Dynrepo/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/face-dynrepo/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dynrepo/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Face-Dynrepo/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/face-dynrepo/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dynrepo/conf</outputDirectory>
         </fileSet>
         <!--Person-Dynrepo目录-->
         <fileSet>
@@ -377,21 +377,21 @@
             <includes>
                 <include>person-dynrepo-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/person-dynrepo/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/person-dynrepo/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Person-Dynrepo/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/person-dynrepo/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/person-dynrepo/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Person-Dynrepo/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/person-dynrepo/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/person-dynrepo/conf</outputDirectory>
         </fileSet>
         <!--Vehicle-Dynrepo目录-->
         <fileSet>
@@ -399,21 +399,21 @@
             <includes>
                 <include>vehicle-dynrepo-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/vehicle-dynrepo/lib</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/vehicle-dynrepo/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Vehicle-Dynrepo/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/vehicle-dynrepo/bin</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/vehicle-dynrepo/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Vehicle-Dynrepo/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/GoSunBigData/Service/Basic/vehicle-dynrepo/conf</outputDirectory>
+            <outputDirectory>normal/component/GoSunBigData/Service/Basic/vehicle-dynrepo/conf</outputDirectory>
         </fileSet>
 
         <!--Collect相关配置-->
@@ -422,30 +422,37 @@
             <includes>
                 <include>collect-ftp-1.0.jar</include>
             </includes>
-            <outputDirectory>component/Collect/lib</outputDirectory>
+            <outputDirectory>normal/component/Collect/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Collect/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/Collect/bin</outputDirectory>
+            <outputDirectory>normal/component/Collect/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Collect/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>component/Collect/conf</outputDirectory>
+            <outputDirectory>normal/component/Collect/conf</outputDirectory>
         </fileSet>
 
         <!--> Deployment模块 <-->
         <fileSet>
-            <directory>../Deployment/</directory>
+            <directory>../Deployment/local</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>./</outputDirectory>
+            <outputDirectory>./local</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Deployment/normal</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>./normal</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>

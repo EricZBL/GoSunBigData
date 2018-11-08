@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 cd `dirname $0`
 ## 脚本所在目录
 BIN_DIR=`pwd`
