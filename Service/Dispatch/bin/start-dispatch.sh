@@ -39,7 +39,7 @@ MYSQL_HOST=172.18.18.105:3306
 # 其他: N/A
 #####################################################################
 
-function start_spingCloud()
+function start_springCloud()
 {
    DISPATCH_PID=`jps | grep ${DISPATCH_JAR_NAME} | awk '{print $1}'`
    if [ -n "${DISPATCH_PID}" ]; then

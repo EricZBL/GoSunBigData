@@ -1,0 +1,6 @@
+0 * * * * /GoSunBigDataDeploy/mysql/sql/sh 24hour_count_table.sh >> /opt/GoSunBigData/Cluster/azkaban/24hour_count.log 2>&1
+0 0 * * * /GoSunBigDataDeploy/mysql/sql/sh device_recogize_table.sh >> /opt/GoSunBigData/Cluster/azkaban/device_recogize.log 2>&1
+0 0 * * * /GoSunBigDataDeploy/mysql/sql/sh imsi_blacklist_table.sh >> /opt/GoSunBigData/Cluster/azkaban/imsi_blacklist.log 2>&1
+0 0 * * * /GoSunBigDataDeploy/mysql/sql/sh fusion_imsi_table.sh >> /opt/GoSunBigData/Cluster/azkaban/fusion_imsi.log 2>&1
+0 0 1 * * /GoSunBigDataDeploy/mysql/sql/sh newpeople_table.sh >> /opt/GoSunBigData/Cluster/azkaban/newpeople.log 2>&1
+0 0 * * * /GoSunBigDataDeploy/mysql/sql/sh outpeople_table.sh >> /opt/GoSunBigData/Cluster/azkaban/outpeople.log 2>&1

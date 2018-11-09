@@ -148,6 +148,13 @@
             </includes>
             <outputDirectory>normal/component/GoSunBigData/Cluster/azkaban</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>../Cluster/Azkaban/bin</directory>
+            <excludes>
+                <exclude>create-schedule-job-to-zip.sh</exclude>
+            </excludes>
+            <outputDirectory>local/mysql/sql</outputDirectory>
+        </fileSet>
 
         <!--FaceCompare相关配置-->
         <fileSet>
@@ -241,7 +248,7 @@
         <fileSet>
             <directory>../Service/Dispatch/target</directory>
             <includes>
-                <include>dipatch-${project.parent.version}.jar</include>
+                <include>dispatch-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>normal/component/GoSunBigData/Service/Cloud/dispatch/lib</outputDirectory>
         </fileSet>
@@ -326,28 +333,6 @@
                 <include>**</include>
             </includes>
             <outputDirectory>normal/component/GoSunBigData/Service/Basic/collect/bin</outputDirectory>
-        </fileSet>
-        <!--Face-Dispatch目录-->
-        <fileSet>
-            <directory>../Service/Face-Dispatch/target</directory>
-            <includes>
-                <include>face-dispatch-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dispatch/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Face-Dispatch/bin</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dispatch/bin</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Face-Dispatch/src/main/resources</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>normal/component/GoSunBigData/Service/Basic/face-dispatch/conf</outputDirectory>
         </fileSet>
         <!--Face-Dynrepo目录-->
         <fileSet>
