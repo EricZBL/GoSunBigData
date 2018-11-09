@@ -59,7 +59,7 @@ do
     else 
         echo "scp dos2unix to the ${DOS2UNIX_RPM_INSTALL_HOME} failed !!!"  | tee -a $LOG_FILE
     fi
-    sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no root@$name "rpm -ivh ${DOS2UNIX_RPM_INSTALL_HOME}/dos2unix-3.1-37.el6.x86_64.rpm; which dos2unix; rm -rf ${INSTALL_HOME_BASIC}"  
+    sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no root@$name "rpm -ivh ${DOS2UNIX_RPM_INSTALL_HOME}/dos2unix-6.0.3-7.el7.x86_64.rpm; which dos2unix; rm -rf ${INSTALL_HOME_BASIC}"
 done
 
 set +x

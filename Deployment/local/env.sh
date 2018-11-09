@@ -3,37 +3,19 @@
 cd `dirname $0`
 ## 脚本所在目录
 BIN_DIR=`pwd`
-cd ../..
-## 安装包根目录
-ROOT_HOME=`pwd`
-## 配置文件目录
-CONF_DIR=${ROOT_HOME}/conf
 ##  docker 安装包目录
-DOCKER_RPM_DIR=${ROOT_HOME}/component/basic_suports/docker
-
+DOCKER_RPM_DIR=${BIN_DIR}/basic_suports/docker
 ## dos2unix rpm 软件目录
-DOS2UNIX_RPM_DIR=${ROOT_HOME}/component/basic_suports/dos2unixRpm
-## 基础工具安装路径
-INSTALL_HOME_BASIC=$(grep System_SuportDir ${CONF_DIR}/cluster_conf.properties|cut -d '=' -f2)
-## dos2unix rpm 软件最终目录
-DOS2UNIX_RPM_INSTALL_HOME=${INSTALL_HOME_BASIC}/dos2unixRpm
+DOS2UNIX_RPM_DIR=${BIN_DIR}/basic_suports/dos2unixRpm
 
 ##安装dos2unix
 echo "==================================================="
 echo "$(date "+%Y-%m-%d  %H:%M:%S")"
 echo "intall dos2unix ...... "
-mkdir -p  ${DOS2UNIX_RPM_INSTALL_HOME}
-cp  -r  ${DOS2UNIX_RPM_DIR}/* ${DOS2UNIX_RPM_INSTALL_HOME}  > /dev/null
-if [ $? == 0 ];then
-    echo "cp dos2unix to the ${DOS2UNIX_RPM_INSTALL_HOME} done !!!"
-else
-    echo "cp dos2unix to the ${DOS2UNIX_RPM_INSTALL_HOME} failed !!!"
-fi
-rpm -ivh ${DOS2UNIX_RPM_INSTALL_HOME}/dos2unix-3.1-37.el6.x86_64.rpm; which dos2unix; rm -rf ${INSTALL_HOME_BASIC}
+rpm -ivh ${DOS2UNIX_RPM_DIR}/dos2unix-6.0.3-7.el7.x86_64.rpm
 
 ##把执行脚本的节点上的脚本转成unix编码
-dos2unix `find ${ROOT_HOME} -name '*.sh' -or -name '*.properties'`
-dos2unix ${ROOT_HOME}/tool/*
+dos2unix `find ${BIN_DIR} -name '*.sh' -or -name '*.properties'`
 echo "转换脚本编码格式完成"
 
 ####关闭防火墙，设置selinux为disable
