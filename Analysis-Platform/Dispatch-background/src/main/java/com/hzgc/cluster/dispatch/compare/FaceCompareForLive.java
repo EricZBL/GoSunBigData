@@ -50,6 +50,7 @@ public class FaceCompareForLive implements Runnable{
             long start = System.currentTimeMillis();
             List<FaceObject> faceObjects = captureCache.getFaceObjectsForLive();
             if(faceObjects.size() == 0){
+                log.info("The size of face for live is 0");
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {

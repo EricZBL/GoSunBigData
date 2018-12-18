@@ -50,6 +50,7 @@ public class CarCompareForLive implements Runnable{
             List<CarObject> carObjects = captureCache.getCarObjectsForLive();
             if(carObjects.size() == 0){
                 try {
+                    log.info("The size of car for live is 0");
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

@@ -31,6 +31,7 @@ import java.util.List;
 @Slf4j
 public class AliveService {
     @Autowired
+    @SuppressWarnings("unused")
     private AliveMapper aliveMapper;
 
     @Autowired

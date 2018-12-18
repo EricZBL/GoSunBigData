@@ -161,6 +161,7 @@ CREATE TABLE IF NOT EXISTS  `t_mac_all` (
   `wifisn` varchar(15) DEFAULT NULL COMMENT 'wifi编号',
   `sn` varchar(15) DEFAULT NULL COMMENT '设备编号',
   `id` bigint(15) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `communityId` bigint NOT NULL COMMENT '社区id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=30001 COMMENT='mac地址信息库';

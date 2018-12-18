@@ -9,8 +9,6 @@
         <result column="household" property="household" jdbcType="VARCHAR"/>
         <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="sex" property="sex" jdbcType="VARCHAR"/>
-        <result column="age" property="age" jdbcType="INTEGER"/>
-        <result column="birthday" property="birthday" jdbcType="VARCHAR"/>
         <result column="politic" property="politic" jdbcType="VARCHAR"/>
         <result column="edulevel" property="edulevel" jdbcType="VARCHAR"/>
         <result column="job" property="job" jdbcType="VARCHAR"/>
@@ -42,8 +40,6 @@
         <result column="household" property="household" jdbcType="VARCHAR"/>
         <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="sex" property="sex" jdbcType="VARCHAR"/>
-        <result column="age" property="age" jdbcType="INTEGER"/>
-        <result column="birthday" property="birthday" jdbcType="VARCHAR"/>
         <result column="politic" property="politic" jdbcType="VARCHAR"/>
         <result column="edulevel" property="edulevel" jdbcType="VARCHAR"/>
         <result column="job" property="job" jdbcType="VARCHAR"/>
@@ -76,12 +72,11 @@
         <result column="idcard" property="idcard" jdbcType="VARCHAR"/>
         <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="sex" property="sex" jdbcType="VARCHAR"/>
-        <result column="birthday" property="birthday" jdbcType="VARCHAR"/>
         <result column="birthplace" property="birthplace" jdbcType="VARCHAR"/>
         <result column="pid" property="pictureId" jdbcType="BIGINT"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, idcard, region, household, address, sex, age, birthday, politic, edulevel,
+        id, name, idcard, region, household, address, sex, politic, edulevel,
         job, birthplace, community, lasttime, createtime, updatetime
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -94,10 +89,10 @@
         select
         <include refid="Base_Column_List"/>
         from t_people
-        where id = (select id from t_people where idcard = #{idcard,jdbcType=VARCHAR})
+        where idcard = #{idCard,jdbcType=VARCHAR}
     </select>
     <select id="searchPeopleByIdCard" resultMap="CommunityPeopleInfo" parameterType="java.lang.String">
-        select id, name, idcard, sex, birthday, birthplace, address
+        select id, name, idcard, sex, birthplace, address
         from t_people
         where idcard = #{idcard,jdbcType=VARCHAR}
     </select>
@@ -227,7 +222,7 @@
     </select>
     <!--小区迁入迁出人口信息查询-->
     <select id="searchCommunityPeopleInfo" resultMap="CommunityPeopleInfo" parameterType="java.lang.String">
-        select a.id, a.name, a.idcard, a.sex, a.birthday, a.birthplace, a.address, b.id as pid
+        select a.id, a.name, a.idcard, a.sex, a.birthplace, a.address, b.id as pid
         from t_people a, t_picture b
         where a.id = b.peopleid
         and a.id = #{id,jdbcType=VARCHAR}

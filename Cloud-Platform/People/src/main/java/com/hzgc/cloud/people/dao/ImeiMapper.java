@@ -18,4 +18,6 @@ public interface ImeiMapper {
     Imei selectByPeopleId(String peopleId);
 
     int delete(String peopleid);
+
+    String selectPeopleIdByImei(String imeiId);
 }

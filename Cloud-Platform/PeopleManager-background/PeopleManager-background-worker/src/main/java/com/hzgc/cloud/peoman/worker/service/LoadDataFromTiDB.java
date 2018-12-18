@@ -27,17 +27,17 @@ class LoadDataFromTiDB {
     private PeopleCompare peopleCompare;
 
     void load(int offset, int limit) {
-        Stopwatch stopwatch = Stopwatch.createStarted();
+        Stopwatch stopwatch = new Stopwatch();
         List<Picture> pictureList = pictureMapper.selectByPrimaryKey(offset, limit);
         if (pictureList != null && pictureList.size() > 0) {
             log.info("Load data from databases successfull, offset {}, limit {}, time {}",
-                    offset, limit, stopwatch.elapsed(TimeUnit.MILLISECONDS));
+                    offset, limit, stopwatch.elapsedMillis());
             for(Picture picture : pictureList) {
                 log.info("--------------"+picture.getPeopleId());
             }
             cacheToMemeory(pictureList);
         } else {
-            log.error("Load data failed, offset {}, limit {}, time {}", offset, limit, stopwatch.elapsed(TimeUnit.MILLISECONDS));
+            log.error("Load data failed, offset {}, limit {}, time {}", offset, limit, stopwatch.elapsedMillis());
         }
 
         List<InnerFeature> featureList = innerFeatureMapper.select();

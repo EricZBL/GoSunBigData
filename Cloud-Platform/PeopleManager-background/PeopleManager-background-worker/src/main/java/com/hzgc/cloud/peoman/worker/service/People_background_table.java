@@ -65,4 +65,6 @@ public interface People_background_table extends Table {
 
     public String INDEX_IDX_RECOGNIZE_01 = "alter table t_recognize_record add index idx_recognize_01(community,capturetime);";
 
+    public String INDEX_FLAG = "alter table t_recognize_record add index flag(peopleid, flag);";
+
 }

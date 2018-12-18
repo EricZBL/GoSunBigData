@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnablePlatformService
 @EnableTransactionManagement
 @EnableInnerService
-@MapperScan(basePackages = {"com.hzgc.service.people.dao", "com.hzgc.service.community.dao"})
+@MapperScan(basePackages = {"com.hzgc.cloud.people.dao", "com.hzgc.cloud.community.dao"})
 public class PeopleApplication {
     public static void main(String[] args) {
         SpringApplication.run(PeopleApplication.class, args);

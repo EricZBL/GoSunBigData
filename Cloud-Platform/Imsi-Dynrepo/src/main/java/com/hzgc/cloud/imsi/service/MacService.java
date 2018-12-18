@@ -8,6 +8,7 @@ import com.hzgc.cloud.imsi.model.MacInfo;
 import com.hzgc.cloud.imsi.model.MacParam;
 import com.hzgc.cloud.imsi.model.MacVO;
 import com.hzgc.cloud.imsi.model.SearchMacDTO;
+import com.hzgc.common.util.json.JacksonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

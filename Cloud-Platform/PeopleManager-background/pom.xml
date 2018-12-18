@@ -3,9 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>cloud-platform</artifactId>
-        <groupId>com.hzgc</groupId>
-        <version>2.4.0</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.7.RELEASE</version>
+        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,14 +19,28 @@
         <module>PeopleManager-background-worker</module>
     </modules>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.SR2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-util</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>1.3.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -34,10 +49,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
+            <version>1.4.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-hystrix</artifactId>
+            <version>1.4.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -54,62 +71,52 @@
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-framework</artifactId>
+            <version>2.12.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-recipes</artifactId>
+            <version>2.12.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ltsopensource</groupId>
-            <artifactId>lts-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ltsopensource</groupId>
-            <artifactId>lts-jobclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ltsopensource</groupId>
-            <artifactId>lts</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ltsopensource</groupId>
-            <artifactId>lts-jobtracker</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ltsopensource</groupId>
-            <artifactId>lts-tasktracker</artifactId>
+            <version>1.16.18</version>
         </dependency>
         <dependency>
             <groupId>org.mapdb</groupId>
             <artifactId>mapdb</artifactId>
+            <version>2.0-beta10</version>
         </dependency>
         <dependency>
             <groupId>com.github.sgroschupf</groupId>
             <artifactId>zkclient</artifactId>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>org.fusesource.leveldbjni</groupId>
             <artifactId>leveldbjni-all</artifactId>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-jni</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-collect</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-seemmo</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-service</artifactId>
+            <version>1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -120,22 +127,27 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
+            <version>4.2.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
+            <version>2.8.0</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.38</version>
         </dependency>
     </dependencies>
 

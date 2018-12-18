@@ -2,6 +2,7 @@ package com.hzgc.cloud.community.param;
 
 import com.hzgc.cloud.people.model.Car;
 import com.hzgc.cloud.people.model.Flag;
+import com.hzgc.cloud.people.model.Imsi;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,6 +21,8 @@ public class ImportantPeopleRecognize implements Serializable {
     private String idCard;
     // 车辆列表
     private List<Car> car;
+    // imsi列表
+    private List<Imsi> imac;
     // 标签列表
     private List<Flag> flag;
     // 最后抓拍时间

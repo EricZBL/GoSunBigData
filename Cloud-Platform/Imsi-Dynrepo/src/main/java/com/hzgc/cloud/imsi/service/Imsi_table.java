@@ -10,6 +10,7 @@ public interface Imsi_table extends Table {
             "  `wifisn` varchar(15) DEFAULT NULL COMMENT 'wifi编号',\n" +
             "  `sn` varchar(15) DEFAULT NULL COMMENT '设备编号',\n" +
             "  `id` bigint(15) NOT NULL AUTO_INCREMENT COMMENT 'ID',\n" +
+            "  `communityId` bigint(10) NOT NULL COMMENT '社区id',\n" +
             "  PRIMARY KEY (`id`),\n" +
             "  UNIQUE KEY `id` (`id`)\n" +
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=30001 COMMENT='mac地址信息库';";
@@ -28,7 +29,7 @@ public interface Imsi_table extends Table {
             "  `savetime` timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',\n" +
             "  `standard` varchar(10) DEFAULT NULL COMMENT '运营商',\n" +
             "  `id` varchar(32) NOT NULL COMMENT 'uuid',\n" +
-            "  `communityId ` bigint NOT NULL COMMENT '社区id',\n" +
+            "  `communityId` bigint NOT NULL COMMENT '社区id',\n" +
             "  PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=74 COMMENT='IMSI码总表';";
 

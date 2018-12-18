@@ -4,6 +4,7 @@ import com.hzgc.common.service.error.RestErrorCode;
 import com.hzgc.common.service.response.ResponseResult;
 import com.hzgc.common.service.rest.BigDataPath;
 import com.hzgc.common.util.json.JacksonUtil;
+import com.hzgc.cloud.people.model.Imei;
 import com.hzgc.cloud.people.param.SearchPeopleDTO;
 import com.hzgc.cloud.people.param.*;
 import com.hzgc.cloud.people.service.PeopleService;
@@ -211,6 +212,25 @@ public class PeopleController {
         }
         log.info("Start select people info, people id is:" + peopleId);
         PeopleVO peopleVO = peopleService.selectByPeopleId(peopleId);
+        log.info("Select people info successfully, result:" + JacksonUtil.toJson(peopleVO));
+        return ResponseResult.init(peopleVO);
+    }
+
+    /**
+     * 根据精神病手环ID(IMEI)查询人口信息
+     *
+     * @param imeiId 精神病手环ID
+     * @return PeopleVO
+     */
+    @ApiOperation(value = "根据精神病手环ID(IMEI)查询人口信息", response = PeopleVO.class)
+    @RequestMapping(value = BigDataPath.PEOPLE_SELECT_BY_IMEIID, method = RequestMethod.GET)
+    public ResponseResult<PeopleVO> selectByImeiId(String imeiId) {
+        if (StringUtils.isBlank(imeiId)) {
+            log.error("Start select people info, but IMEI ID is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询手环ID为空，请检查！");
+        }
+        log.info("Start select people info, IMEI ID is:" + imeiId);
+        PeopleVO peopleVO = peopleService.selectByImeiId(imeiId);
         log.info("Select people info successfully, result:" + JacksonUtil.toJson(peopleVO));
         return ResponseResult.init(peopleVO);
     }

@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableEurekaClient
 @EnableSwagger2
 @SpringBootApplication
-@MapperScan(value = "com.hzgc.service.imsi.dao")
+@MapperScan(value = "com.hzgc.cloud.imsi.dao")
 @EnableTransactionManagement
 @EnableKafka
 @EnablePlatformService

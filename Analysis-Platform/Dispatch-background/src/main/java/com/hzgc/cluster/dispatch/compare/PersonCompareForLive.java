@@ -50,6 +50,7 @@ public class PersonCompareForLive implements Runnable{
             long start = System.currentTimeMillis();
             List<PersonObject> personObjects = captureCache.getPersonObjectForLive();
             if(personObjects.size() == 0){
+                log.info("The size of person for live is 0");
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {

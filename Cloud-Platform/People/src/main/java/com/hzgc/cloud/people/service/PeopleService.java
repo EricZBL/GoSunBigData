@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.hzgc.common.service.api.service.InnerService;
 import com.hzgc.common.service.api.service.PlatformService;
 import com.hzgc.common.service.peoman.SyncPeopleManager;
+import com.hzgc.common.util.basic.ImsiUtil;
 import com.hzgc.common.util.basic.UuidUtil;
 import com.hzgc.common.util.json.JacksonUtil;
 import com.hzgc.jniface.FaceAttribute;
@@ -18,6 +19,7 @@ import com.hzgc.cloud.people.dao.*;
 import com.hzgc.cloud.people.fields.Flag;
 import com.hzgc.cloud.people.model.*;
 import com.hzgc.cloud.people.param.*;
+import com.hzgc.cloud.people.util.IdCardUtil;
 import com.hzgc.cloud.people.util.PeopleExcelUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -99,10 +101,6 @@ public class PeopleService {
     private String topic;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private final static String IDCARD_PIC = "idcardpic";
-
-    private final static String CAPTURE_PIC = "capturepic";
 
     private void sendKafka(String key, Object data) {
         kafkaTemplate.send(topic, key, JacksonUtil.toJson(data));
@@ -579,8 +577,8 @@ public class PeopleService {
             peopleVO.setHousehold(people.getHousehold());
             peopleVO.setAddress(people.getAddress());
             peopleVO.setSex(people.getSex());
-            peopleVO.setAge(people.getAge());
-            peopleVO.setBirthday(people.getBirthday());
+            peopleVO.setAge(IdCardUtil.getAge(people.getIdcard()));
+            peopleVO.setBirthday(IdCardUtil.getBirthday(people.getIdcard()));
             peopleVO.setPolitic(people.getPolitic());
             peopleVO.setEduLevel(people.getEdulevel());
             peopleVO.setJob(people.getJob());
@@ -615,10 +613,13 @@ public class PeopleService {
             if (people.getImsi() != null && people.getImsi().size() > 0) {
                 List<Imsi> imsis = people.getImsi();
                 List<String> imsiList = new ArrayList<>();
+                List<String> imacList = new ArrayList<>();
                 for (Imsi imsi : imsis) {
                     imsiList.add(imsi.getImsi());
+                    imacList.add(ImsiUtil.toMac(imsi.getImsi()));
                 }
                 peopleVO.setImsi(imsiList);
+                peopleVO.setImac(imacList);
             }
             if (people.getPhone() != null && people.getPhone().size() > 0) {
                 List<Phone> phones = people.getPhone();
@@ -665,6 +666,21 @@ public class PeopleService {
     }
 
     /**
+     * 根据精神病手环ID(IMEI)查询人口信息
+     *
+     * @param imeiId 精神病手环ID
+     * @return peopleVO
+     */
+    public PeopleVO selectByImeiId(String imeiId) {
+        PeopleVO peopleVO = new PeopleVO();
+        String peopleId = imeiMapper.selectPeopleIdByImei(imeiId);
+        if (StringUtils.isNotBlank(peopleId)){
+            peopleVO = this.selectByPeopleId(peopleId);
+        }
+        return peopleVO;
+    }
+
+    /**
      * 查询人员对象
      *
      * @param param 查询过滤字段封装
@@ -691,8 +707,8 @@ public class PeopleService {
                     peopleVO.setHousehold(people.getHousehold());
                     peopleVO.setAddress(people.getAddress());
                     peopleVO.setSex(people.getSex());
-                    peopleVO.setAge(people.getAge());
-                    peopleVO.setBirthday(people.getBirthday());
+                    peopleVO.setAge(IdCardUtil.getAge(people.getIdcard()));
+                    peopleVO.setBirthday(IdCardUtil.getBirthday(people.getIdcard()));
                     peopleVO.setPolitic(people.getPolitic());
                     peopleVO.setEduLevel(people.getEdulevel());
                     peopleVO.setJob(people.getJob());
@@ -756,8 +772,8 @@ public class PeopleService {
             peopleVO.setRegionId(people.getRegion());
             peopleVO.setAddress(people.getAddress());
             peopleVO.setSex(people.getSex());
-            peopleVO.setAge(people.getAge());
-            peopleVO.setBirthday(people.getBirthday());
+            peopleVO.setAge(IdCardUtil.getAge(people.getIdcard()));
+            peopleVO.setBirthday(IdCardUtil.getBirthday(people.getIdcard()));
             peopleVO.setPolitic(people.getPolitic());
             peopleVO.setEduLevel(people.getEdulevel());
             peopleVO.setJob(people.getJob());

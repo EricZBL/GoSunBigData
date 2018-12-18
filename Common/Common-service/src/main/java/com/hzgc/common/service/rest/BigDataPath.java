@@ -50,6 +50,7 @@ public class BigDataPath {
     public static final String MENTALPATIENT_UPDATE="/mentalPatient_update";
     public static final String MENTALPATIENT_SELECT_BY_PEOPLEID="/select_mentalPatient";
     public static final String PEOPLE_SELECT_BY_PEOPLEID="/select_peopleid";
+    public static final String PEOPLE_SELECT_BY_IMEIID="/select_imeiid";
     public static final String PEOPLE_SEARCH_BY_IDCARD="/select_idcard";
     public static final String PEOPLE_INSTERT_PICTURE="/insert_picture";
     public static final String PEOPLE_UPDATE_PICTURE="/update_picture";
